@@ -1,0 +1,66 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { getCoursBySlug } from "@/lib/db/queries/cours";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const c = await getCoursBySlug(slug);
+  return { title: c ? `${c.title} — DeenShare` : "Cours — DeenShare" };
+}
+
+export default async function CoursDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const c = await getCoursBySlug(slug);
+
+  if (!c) notFound();
+
+  return (
+    <div>
+      <nav className="text-sm text-muted-foreground">
+        <Link href="/cours" className="hover:text-foreground">
+          Cours
+        </Link>{" "}
+        / <span className="text-foreground">{c.title}</span>
+      </nav>
+
+      <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight">
+        {c.title}
+      </h1>
+      {c.description && (
+        <p className="mt-2 text-muted-foreground">{c.description}</p>
+      )}
+
+      <h2 className="mt-10 font-heading text-xl font-semibold">
+        Thématiques
+      </h2>
+      {c.thematiques.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          Aucune thématique pour ce cours pour le moment.
+        </p>
+      ) : (
+        <div className="mt-4 grid gap-3">
+          {c.thematiques.map((t) => (
+            <Link key={t.id} href={`/thematiques/${t.slug}`}>
+              <Card className="transition-colors hover:bg-muted">
+                <CardHeader>
+                  <CardTitle className="font-heading text-base">
+                    {t.title}
+                  </CardTitle>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
