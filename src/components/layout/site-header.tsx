@@ -16,7 +16,11 @@ export function SiteHeader() {
           <Link href="/seances" className="hover:text-foreground">
             Séances
           </Link>
-          <Link href="/recherche" className="hover:text-foreground">
+          <Link
+            href="/recherche"
+            className="hover:text-foreground"
+            title="Recherche (⌘K)"
+          >
             Recherche
           </Link>
           <Button render={<Link href="/login" />} size="sm">
