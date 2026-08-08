@@ -10,7 +10,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["admin", "contributor"]);
+export const roleEnum = pgEnum("role", ["admin", "contributor", "viewer"]);
 export const ressourceTypeEnum = pgEnum("ressource_type", [
   "video",
   "pdf",
@@ -22,7 +22,7 @@ export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
   email: text("email").notNull(),
   fullName: text("full_name"),
-  role: roleEnum("role").notNull().default("contributor"),
+  role: roleEnum("role").notNull().default("viewer"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
