@@ -1,8 +1,11 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { getCurrentProfile } from "@/lib/auth/get-session";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const profile = await getCurrentProfile();
+
   return (
     <header className="border-b">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
@@ -23,8 +26,12 @@ export function SiteHeader() {
           >
             Recherche
           </Link>
-          <Button render={<Link href="/login" />} size="sm">
-            Se connecter
+          <Button
+            render={<Link href={profile ? "/dashboard" : "/login"} />}
+            nativeButton={false}
+            size="sm"
+          >
+            {profile ? "Tableau de bord" : "Se connecter"}
           </Button>
         </nav>
       </div>
