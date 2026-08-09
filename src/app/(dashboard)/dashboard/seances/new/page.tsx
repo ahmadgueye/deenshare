@@ -17,6 +17,8 @@ export default async function NewSeancePage() {
     id: r.id,
     title: r.title,
     type: r.type,
+    coursTitle: r.thematique.cours.title,
+    thematiqueTitle: r.thematique.title,
   }));
 
   return (

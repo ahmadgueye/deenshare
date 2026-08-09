@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { SubmitButton } from "@/components/dashboard/submit-button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ import {
   updateSeance,
   type ActionState,
 } from "@/lib/actions/seances";
+import { cn } from "@/lib/utils";
 
 const typeLabels = { video: "Vidéo", pdf: "PDF", lien: "Lien" };
 
@@ -34,6 +35,8 @@ export function SeanceForm({
     id: string;
     title: string;
     type: "video" | "pdf" | "lien";
+    coursTitle: string;
+    thematiqueTitle: string;
   }[];
   seance?: {
     id: string;
@@ -51,6 +54,9 @@ export function SeanceForm({
     action,
     undefined
   );
+
+  const [thematiqueSearch, setThematiqueSearch] = useState("");
+  const [ressourceSearch, setRessourceSearch] = useState("");
 
   return (
     <form action={formAction} className="max-w-lg">
@@ -90,47 +96,87 @@ export function SeanceForm({
 
         <Field>
           <FieldLabel>Thématiques abordées</FieldLabel>
-          <div className="max-h-48 space-y-2 overflow-y-auto border p-3">
-            {thematiqueOptions.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aucune thématique disponible.
-              </p>
-            ) : (
-              thematiqueOptions.map((t) => (
-                <label key={t.id} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    name="thematiqueIds"
-                    value={t.id}
-                    defaultChecked={linkedThematiqueIds.includes(t.id)}
-                  />
-                  {t.coursTitle} · {t.title}
-                </label>
-              ))
-            )}
-          </div>
+          {thematiqueOptions.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aucune thématique disponible.
+            </p>
+          ) : (
+            <>
+              <Input
+                placeholder="Rechercher une thématique…"
+                value={thematiqueSearch}
+                onChange={(e) => setThematiqueSearch(e.target.value)}
+              />
+              <div className="max-h-48 space-y-2 overflow-y-auto border p-3">
+                {thematiqueOptions.map((t) => {
+                  const label = `${t.coursTitle} · ${t.title}`;
+                  const matches = label
+                    .toLowerCase()
+                    .includes(thematiqueSearch.trim().toLowerCase());
+                  return (
+                    <label
+                      key={t.id}
+                      className={cn(
+                        "flex items-center gap-2 text-sm",
+                        !matches && "hidden"
+                      )}
+                    >
+                      <Checkbox
+                        name="thematiqueIds"
+                        value={t.id}
+                        defaultChecked={linkedThematiqueIds.includes(t.id)}
+                      />
+                      {label}
+                    </label>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </Field>
 
         <Field>
           <FieldLabel>Ressources associées</FieldLabel>
-          <div className="max-h-48 space-y-2 overflow-y-auto border p-3">
-            {ressourceOptions.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aucune ressource disponible.
-              </p>
-            ) : (
-              ressourceOptions.map((r) => (
-                <label key={r.id} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    name="ressourceIds"
-                    value={r.id}
-                    defaultChecked={linkedRessourceIds.includes(r.id)}
-                  />
-                  {r.title}
-                  <Badge variant="secondary">{typeLabels[r.type]}</Badge>
-                </label>
-              ))
-            )}
-          </div>
+          {ressourceOptions.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Aucune ressource disponible.
+            </p>
+          ) : (
+            <>
+              <Input
+                placeholder="Rechercher une ressource…"
+                value={ressourceSearch}
+                onChange={(e) => setRessourceSearch(e.target.value)}
+              />
+              <div className="max-h-48 space-y-2 overflow-y-auto border p-3">
+                {ressourceOptions.map((r) => {
+                  const label = `${r.coursTitle} · ${r.thematiqueTitle} · ${r.title}`;
+                  const matches = label
+                    .toLowerCase()
+                    .includes(ressourceSearch.trim().toLowerCase());
+                  return (
+                    <label
+                      key={r.id}
+                      className={cn(
+                        "flex items-center gap-2 text-sm",
+                        !matches && "hidden"
+                      )}
+                    >
+                      <Checkbox
+                        name="ressourceIds"
+                        value={r.id}
+                        defaultChecked={linkedRessourceIds.includes(r.id)}
+                      />
+                      <span className="flex-1">{label}</span>
+                      <Badge variant="secondary" className="shrink-0">
+                        {typeLabels[r.type]}
+                      </Badge>
+                    </label>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </Field>
 
         {state?.error && <FieldError>{state.error}</FieldError>}
