@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
-import { Button } from "@/components/ui/button";
+import { SignOutButton } from "@/components/dashboard/sign-out-button";
 import { getCurrentProfile } from "@/lib/auth/get-session";
-import { signOutAction } from "@/lib/actions/auth";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -32,11 +31,7 @@ export default async function DashboardLayout({
           contribuer. Demande à un administrateur de t&apos;ajouter comme
           contributeur.
         </p>
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline" size="sm">
-            Se déconnecter
-          </Button>
-        </form>
+        <SignOutButton />
       </div>
     );
   }
