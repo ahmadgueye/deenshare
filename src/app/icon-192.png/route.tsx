@@ -1,24 +1,10 @@
 import { ImageResponse } from "next/og";
 
+import { AppIconMark } from "@/lib/app-icon";
+
 export async function GET() {
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#171717",
-          color: "#fafafa",
-          fontSize: 108,
-          fontWeight: 700,
-        }}
-      >
-        D
-      </div>
-    ),
-    { width: 192, height: 192 }
-  );
+  return new ImageResponse(<AppIconMark size={192} />, {
+    width: 192,
+    height: 192,
+  });
 }
