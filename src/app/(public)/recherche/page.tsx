@@ -100,10 +100,10 @@ export default async function RecherchePage({ searchParams }: Props) {
           className="max-w-md"
         />
 
-        <div className="mt-6 grid max-w-md grid-cols-2 gap-6">
+        <div className="mt-6 flex flex-col gap-4">
           <div>
             <p className="mb-2 text-sm font-medium">Type de contenu</p>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
               {ALL_ENTITY_TYPES.map((type) => (
                 <label key={type} className="flex items-center gap-2 text-sm">
                   <Checkbox
@@ -118,7 +118,7 @@ export default async function RecherchePage({ searchParams }: Props) {
           </div>
           <div>
             <p className="mb-2 text-sm font-medium">Type de ressource</p>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
               {ALL_RESSOURCE_TYPES.map((type) => (
                 <label key={type} className="flex items-center gap-2 text-sm">
                   <Checkbox
