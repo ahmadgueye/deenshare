@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
+import { BackButton } from "@/components/public/back-button";
 import { MarkdownContent } from "@/components/public/markdown-content";
 import { RessourceItem } from "@/components/public/ressource-item";
 import { getSeanceBySlug } from "@/lib/db/queries/seances";
@@ -34,7 +35,8 @@ export default async function SeanceDetailPage({ params }: Props) {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <nav className="text-sm text-muted-foreground">
+      <BackButton />
+      <nav className="mt-3 text-sm text-muted-foreground">
         <Link href="/seances" className="hover:text-foreground">
           Séances
         </Link>{" "}

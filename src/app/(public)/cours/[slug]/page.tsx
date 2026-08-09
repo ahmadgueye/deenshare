@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { BackButton } from "@/components/public/back-button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCoursBySlug } from "@/lib/db/queries/cours";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
@@ -32,7 +33,8 @@ export default async function CoursDetailPage({ params }: Props) {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <nav className="text-sm text-muted-foreground">
+      <BackButton />
+      <nav className="mt-3 text-sm text-muted-foreground">
         <Link href="/cours" className="hover:text-foreground">
           Cours
         </Link>{" "}

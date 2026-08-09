@@ -5,7 +5,7 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function SiteHeader() {
   return (
-    <header className="border-b">
+    <header className="sticky top-0 z-30 border-b bg-background">
       <div className="mx-auto grid w-full max-w-5xl grid-cols-[1fr_auto_1fr] items-center px-6 py-4">
         <Link
           href="/"
