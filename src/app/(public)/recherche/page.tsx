@@ -134,7 +134,7 @@ export default async function RecherchePage({ searchParams }: Props) {
         </p>
       )}
 
-      <div className="mt-4 grid gap-2">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {results.map((r, i) => (
           <Link
             key={`${r.type}-${i}`}
