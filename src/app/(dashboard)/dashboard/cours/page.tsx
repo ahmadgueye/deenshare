@@ -1,17 +1,8 @@
 import Link from "next/link";
-import { Pencil, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { DeleteButton } from "@/components/dashboard/delete-button";
-import { deleteCours } from "@/lib/actions/cours";
+import { CoursTable } from "@/components/dashboard/cours-table";
 import { getAllCours } from "@/lib/db/queries/cours";
 
 export default async function DashboardCoursPage() {
@@ -29,45 +20,9 @@ export default async function DashboardCoursPage() {
         </Button>
       </div>
 
-      {coursList.length === 0 ? (
-        <p className="mt-8 text-sm text-muted-foreground">
-          Aucun cours pour le moment.
-        </p>
-      ) : (
-        <Table className="mt-6">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Titre</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="w-24" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {coursList.map((c) => (
-              <TableRow key={c.id}>
-                <TableCell className="font-medium">{c.title}</TableCell>
-                <TableCell className="max-w-md truncate text-muted-foreground">
-                  {c.description}
-                </TableCell>
-                <TableCell className="flex justify-end gap-1">
-                  <Button
-                    render={<Link href={`/dashboard/cours/${c.id}/edit`} />}
-                    nativeButton={false}
-                    variant="ghost"
-                    size="icon-sm"
-                  >
-                    <Pencil className="size-4" />
-                  </Button>
-                  <DeleteButton
-                    action={deleteCours.bind(null, c.id)}
-                    itemLabel={c.title}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+      <div className="mt-6">
+        <CoursTable data={coursList} />
+      </div>
     </div>
   );
 }
