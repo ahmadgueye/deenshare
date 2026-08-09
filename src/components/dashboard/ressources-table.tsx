@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
   Table,
   TableBody,
@@ -38,10 +39,23 @@ type RessourceRow = {
   thematique: { id: string; title: string; cours: { title: string } };
 };
 
+type SortKey = "title" | "type" | "thematique" | "createdAt";
+
 export function RessourcesTable({ data }: { data: RessourceRow[] }) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [thematiqueFilter, setThematiqueFilter] = useState("all");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  }
 
   const thematiqueOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -69,6 +83,22 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
       return matchesType && matchesThematique && matchesSearch;
     });
   }, [data, search, typeFilter, thematiqueFilter]);
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      let cmp = 0;
+      if (sortKey === "title") cmp = a.title.localeCompare(b.title);
+      else if (sortKey === "type")
+        cmp = typeLabels[a.type].localeCompare(typeLabels[b.type]);
+      else if (sortKey === "thematique")
+        cmp = a.thematique.title.localeCompare(b.thematique.title);
+      else cmp = a.createdAt.getTime() - b.createdAt.getTime();
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
 
   return (
     <div>
@@ -115,21 +145,45 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Aucun résultat.</p>
       ) : (
         <Table className="mt-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Titre</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Thématique</TableHead>
-              <TableHead>Créé le</TableHead>
+              <SortableTableHead
+                label="Titre"
+                sortKey="title"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Type"
+                sortKey="type"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Thématique"
+                sortKey="thematique"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Créé le"
+                sortKey="createdAt"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
               <TableHead className="w-24" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((r) => (
+            {sorted.map((r) => (
               <TableRow key={r.id}>
                 <TableCell className="font-medium">{r.title}</TableCell>
                 <TableCell>

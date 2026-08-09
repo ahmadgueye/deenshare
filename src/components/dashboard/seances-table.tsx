@@ -7,6 +7,7 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/dashboard/delete-button";
 import { Input } from "@/components/ui/input";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
   Table,
   TableBody,
@@ -24,14 +25,44 @@ type SeanceRow = {
   createdAt: Date;
 };
 
+type SortKey = "title" | "sessionDate" | "createdAt";
+
 export function SeancesTable({ data }: { data: SeanceRow[] }) {
   const [search, setSearch] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return data;
     return data.filter((s) => s.title.toLowerCase().includes(q));
   }, [data, search]);
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      let cmp = 0;
+      if (sortKey === "title") cmp = a.title.localeCompare(b.title);
+      else if (sortKey === "sessionDate") {
+        if (!a.sessionDate && !b.sessionDate) cmp = 0;
+        else if (!a.sessionDate) cmp = 1;
+        else if (!b.sessionDate) cmp = -1;
+        else cmp = a.sessionDate.localeCompare(b.sessionDate);
+      } else cmp = a.createdAt.getTime() - b.createdAt.getTime();
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
 
   return (
     <div>
@@ -42,20 +73,38 @@ export function SeancesTable({ data }: { data: SeanceRow[] }) {
         className="max-w-xs"
       />
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Aucun résultat.</p>
       ) : (
         <Table className="mt-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Titre</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Créé le</TableHead>
+              <SortableTableHead
+                label="Titre"
+                sortKey="title"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Date"
+                sortKey="sessionDate"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Créé le"
+                sortKey="createdAt"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
               <TableHead className="w-24" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((s) => (
+            {sorted.map((s) => (
               <TableRow key={s.id}>
                 <TableCell className="font-medium">{s.title}</TableCell>
                 <TableCell className="text-muted-foreground">

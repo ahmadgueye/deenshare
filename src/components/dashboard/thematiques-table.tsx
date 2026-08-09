@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
   Table,
   TableBody,
@@ -31,9 +32,22 @@ type ThematiqueRow = {
   cours: { id: string; title: string };
 };
 
+type SortKey = "title" | "cours" | "createdAt";
+
 export function ThematiquesTable({ data }: { data: ThematiqueRow[] }) {
   const [search, setSearch] = useState("");
   const [coursFilter, setCoursFilter] = useState("all");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  }
 
   const coursOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -61,6 +75,20 @@ export function ThematiquesTable({ data }: { data: ThematiqueRow[] }) {
       return matchesCours && matchesSearch;
     });
   }, [data, search, coursFilter]);
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      let cmp = 0;
+      if (sortKey === "title") cmp = a.title.localeCompare(b.title);
+      else if (sortKey === "cours")
+        cmp = a.cours.title.localeCompare(b.cours.title);
+      else cmp = a.createdAt.getTime() - b.createdAt.getTime();
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
 
   return (
     <div>
@@ -90,20 +118,38 @@ export function ThematiquesTable({ data }: { data: ThematiqueRow[] }) {
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Aucun résultat.</p>
       ) : (
         <Table className="mt-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Titre</TableHead>
-              <TableHead>Cours</TableHead>
-              <TableHead>Créé le</TableHead>
+              <SortableTableHead
+                label="Titre"
+                sortKey="title"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Cours"
+                sortKey="cours"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
+              <SortableTableHead
+                label="Créé le"
+                sortKey="createdAt"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
               <TableHead className="w-24" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((t) => (
+            {sorted.map((t) => (
               <TableRow key={t.id}>
                 <TableCell className="font-medium">{t.title}</TableCell>
                 <TableCell className="text-muted-foreground">

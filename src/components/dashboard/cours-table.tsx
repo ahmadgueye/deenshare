@@ -7,6 +7,7 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/dashboard/delete-button";
 import { Input } from "@/components/ui/input";
+import { SortableTableHead } from "@/components/dashboard/sortable-table-head";
 import {
   Table,
   TableBody,
@@ -24,8 +25,21 @@ type CoursRow = {
   createdAt: Date;
 };
 
+type SortKey = "title" | "createdAt";
+
 export function CoursTable({ data }: { data: CoursRow[] }) {
   const [search, setSearch] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -37,6 +51,19 @@ export function CoursTable({ data }: { data: CoursRow[] }) {
     );
   }, [data, search]);
 
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      const cmp =
+        sortKey === "title"
+          ? a.title.localeCompare(b.title)
+          : a.createdAt.getTime() - b.createdAt.getTime();
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
+
   return (
     <div>
       <Input
@@ -46,20 +73,32 @@ export function CoursTable({ data }: { data: CoursRow[] }) {
         className="max-w-xs"
       />
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Aucun résultat.</p>
       ) : (
         <Table className="mt-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Titre</TableHead>
+              <SortableTableHead
+                label="Titre"
+                sortKey="title"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
               <TableHead>Description</TableHead>
-              <TableHead>Créé le</TableHead>
+              <SortableTableHead
+                label="Créé le"
+                sortKey="createdAt"
+                currentKey={sortKey}
+                direction={sortDir}
+                onSort={handleSort}
+              />
               <TableHead className="w-24" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((c) => (
+            {sorted.map((c) => (
               <TableRow key={c.id}>
                 <TableCell className="font-medium">{c.title}</TableCell>
                 <TableCell className="max-w-md truncate text-muted-foreground">
