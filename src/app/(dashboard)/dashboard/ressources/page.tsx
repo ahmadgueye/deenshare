@@ -26,7 +26,7 @@ export default async function DashboardRessourcesPage() {
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
           Ressources
         </h1>
-        <Button render={<Link href="/dashboard/ressources/new" />}>
+        <Button render={<Link href="/dashboard/ressources/new" />} nativeButton={false}>
           <Plus className="size-4" />
           Nouvelle ressource
         </Button>
@@ -61,6 +61,7 @@ export default async function DashboardRessourcesPage() {
                     render={
                       <Link href={`/dashboard/ressources/${r.id}/edit`} />
                     }
+                    nativeButton={false}
                     variant="ghost"
                     size="icon-sm"
                   >

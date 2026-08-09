@@ -23,7 +23,7 @@ export default async function DashboardCoursPage() {
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
           Cours
         </h1>
-        <Button render={<Link href="/dashboard/cours/new" />}>
+        <Button render={<Link href="/dashboard/cours/new" />} nativeButton={false}>
           <Plus className="size-4" />
           Nouveau cours
         </Button>
@@ -52,6 +52,7 @@ export default async function DashboardCoursPage() {
                 <TableCell className="flex justify-end gap-1">
                   <Button
                     render={<Link href={`/dashboard/cours/${c.id}/edit`} />}
+                    nativeButton={false}
                     variant="ghost"
                     size="icon-sm"
                   >

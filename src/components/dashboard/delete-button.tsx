@@ -24,10 +24,7 @@ export function DeleteButton({
 }) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger
-        render={<Button variant="ghost" size="icon-sm" />}
-        nativeButton={false}
-      >
+      <AlertDialogTrigger render={<Button variant="ghost" size="icon-sm" />}>
         <Trash2 className="size-4" />
       </AlertDialogTrigger>
       <AlertDialogContent>

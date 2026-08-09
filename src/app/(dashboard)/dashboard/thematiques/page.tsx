@@ -23,7 +23,7 @@ export default async function DashboardThematiquesPage() {
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
           Thématiques
         </h1>
-        <Button render={<Link href="/dashboard/thematiques/new" />}>
+        <Button render={<Link href="/dashboard/thematiques/new" />} nativeButton={false}>
           <Plus className="size-4" />
           Nouvelle thématique
         </Button>
@@ -54,6 +54,7 @@ export default async function DashboardThematiquesPage() {
                     render={
                       <Link href={`/dashboard/thematiques/${t.id}/edit`} />
                     }
+                    nativeButton={false}
                     variant="ghost"
                     size="icon-sm"
                   >

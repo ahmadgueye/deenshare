@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { RessourceUrlField } from "@/components/dashboard/ressource-url-field";
 import { SubmitButton } from "@/components/dashboard/submit-button";
 import {
   Field,
@@ -96,18 +97,7 @@ export function RessourceForm({
           </Select>
         </Field>
         <Field>
-          <FieldLabel htmlFor="url">Lien</FieldLabel>
-          <Input
-            id="url"
-            name="url"
-            type="url"
-            placeholder="https://…"
-            defaultValue={ressource?.url}
-            required
-          />
-          <FieldDescription>
-            Lien Drive, YouTube ou toute autre URL externe.
-          </FieldDescription>
+          <RessourceUrlField defaultUrl={ressource?.url} />
         </Field>
         <Field>
           <FieldLabel htmlFor="description">Description</FieldLabel>

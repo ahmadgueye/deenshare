@@ -29,6 +29,13 @@
       "when": 1786230900000,
       "tag": "0003_default_viewer_role",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786320000000,
+      "tag": "0004_ressource_storage_bucket",
+      "breakpoints": true
     }
   ]
 }
