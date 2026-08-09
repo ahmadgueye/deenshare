@@ -26,8 +26,6 @@ import {
   type ActionState,
 } from "@/lib/actions/ressources";
 
-const typeLabels = { video: "Vidéo", pdf: "PDF", lien: "Lien" };
-
 export function RessourceForm({
   thematiqueOptions,
   ressource,
@@ -86,27 +84,10 @@ export function RessourceForm({
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="type">Type</FieldLabel>
-          <Select
-            name="type"
-            defaultValue={ressource?.type ?? "lien"}
-            items={typeLabels}
-            required
-          >
-            <SelectTrigger id="type" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(typeLabels).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-        <Field>
-          <RessourceUrlField defaultUrl={ressource?.url} />
+          <RessourceUrlField
+            defaultUrl={ressource?.url}
+            defaultType={ressource?.type}
+          />
         </Field>
         <Field>
           <FieldLabel htmlFor="description">Description</FieldLabel>

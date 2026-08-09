@@ -5,10 +5,33 @@ import { Loader2, Upload } from "lucide-react";
 
 import { FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/lib/supabase/client";
 
+type RessourceType = "video" | "pdf" | "lien";
+
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB — see storage bucket limit
+
+export const typeLabels: Record<RessourceType, string> = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
+};
+
+const videoExtensions = ["mp4", "mov", "webm", "avi", "mkv", "m4v"];
+
+function guessTypeFromFileName(name: string): RessourceType {
+  const ext = name.split(".").pop()?.toLowerCase() ?? "";
+  if (videoExtensions.includes(ext)) return "video";
+  return "pdf"; // pdf, and a reasonable fallback for any other document type
+}
 
 // Supabase Storage object keys reject accented/special characters (e.g. "º")
 // and are safest without spaces — sanitize while keeping the extension.
@@ -27,10 +50,17 @@ function sanitizeFileName(name: string) {
   return `${safeBase || "fichier"}${ext}`;
 }
 
-export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
+export function RessourceUrlField({
+  defaultUrl,
+  defaultType,
+}: {
+  defaultUrl?: string;
+  defaultType?: RessourceType;
+}) {
   const fileInputId = useId();
   const [mode, setMode] = useState<"lien" | "fichier">("lien");
   const [url, setUrl] = useState(defaultUrl ?? "");
+  const [type, setType] = useState<RessourceType>(defaultType ?? "lien");
   const [fileName, setFileName] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +92,7 @@ export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
 
     const { data } = supabase.storage.from("ressources").getPublicUrl(path);
     setUrl(data.publicUrl);
+    setType(guessTypeFromFileName(file.name));
     setFileName(file.name);
     setUploading(false);
   }
@@ -77,12 +108,31 @@ export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
       </Tabs>
 
       {mode === "lien" ? (
-        <Input
-          type="url"
-          placeholder="https://…"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <>
+          <Input
+            type="url"
+            placeholder="https://…"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+          <FieldLabel htmlFor="type">Type</FieldLabel>
+          <Select
+            value={type}
+            onValueChange={(v) => v && setType(v as RessourceType)}
+            items={typeLabels}
+          >
+            <SelectTrigger id="type" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(typeLabels).map(([value, label]) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
       ) : (
         <div>
           <label
@@ -103,6 +153,11 @@ export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
             onChange={handleFileChange}
             disabled={uploading}
           />
+          {fileName && !uploading && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Type détecté : {typeLabels[type]}
+            </p>
+          )}
         </div>
       )}
 
@@ -113,6 +168,7 @@ export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
       </FieldDescription>
 
       <input type="hidden" name="url" value={url} />
+      <input type="hidden" name="type" value={type} />
     </div>
   );
 }

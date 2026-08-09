@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { LayoutDashboard, LogIn } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { MobileNav } from "@/components/layout/mobile-nav";
 import { SiteNavLinks } from "@/components/layout/site-nav-links";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { getCurrentProfile } from "@/lib/auth/get-session";
@@ -10,6 +10,7 @@ export async function SiteHeader() {
   const profile = await getCurrentProfile();
   const authHref = profile ? "/dashboard" : "/login";
   const authLabel = profile ? "Tableau de bord" : "Se connecter";
+  const AuthIcon = profile ? LayoutDashboard : LogIn;
 
   return (
     <header className="border-b">
@@ -31,7 +32,16 @@ export async function SiteHeader() {
           >
             {authLabel}
           </Button>
-          <MobileNav authHref={authHref} authLabel={authLabel} />
+          <Button
+            render={<Link href={authHref} />}
+            nativeButton={false}
+            variant="ghost"
+            size="icon"
+            className="sm:hidden"
+            aria-label={authLabel}
+          >
+            <AuthIcon className="size-5" />
+          </Button>
         </div>
       </div>
     </header>
