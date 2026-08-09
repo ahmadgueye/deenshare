@@ -3,9 +3,7 @@ import Link from "next/link";
 import { BookOpen, Calendar, ListTree, type LucideIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { SearchForm } from "@/components/public/search-form";
 import {
   ALL_ENTITY_TYPES,
   ALL_RESSOURCE_TYPES,
@@ -91,52 +89,12 @@ export default async function RecherchePage({ searchParams }: Props) {
         Recherche
       </h1>
 
-      <form method="get" className="mt-6">
-        <Input
-          type="search"
-          name="q"
-          defaultValue={q}
-          placeholder="Rechercher un cours, une thématique, une ressource…"
-          className="max-w-md"
-        />
-
-        <div className="mt-6 flex flex-col gap-4">
-          <div>
-            <p className="mb-2 text-sm font-medium">Type de contenu</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {ALL_ENTITY_TYPES.map((type) => (
-                <label key={type} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    name="types"
-                    value={type}
-                    defaultChecked={selectedTypes.includes(type)}
-                  />
-                  {typeLabels[type]}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="mb-2 text-sm font-medium">Type de ressource</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {ALL_RESSOURCE_TYPES.map((type) => (
-                <label key={type} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    name="rtype"
-                    value={type}
-                    defaultChecked={selectedRessourceTypes.includes(type)}
-                  />
-                  {ressourceTypeConfig[type].label}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <Button type="submit" className="mt-4">
-          Rechercher
-        </Button>
-      </form>
+      <SearchForm
+        q={q}
+        selectedTypes={selectedTypes}
+        selectedRessourceTypes={selectedRessourceTypes}
+        typeLabels={typeLabels}
+      />
 
       {hasSearched && (
         <p className="mt-6 text-sm text-muted-foreground">

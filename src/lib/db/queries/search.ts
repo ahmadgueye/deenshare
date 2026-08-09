@@ -2,24 +2,21 @@ import { and, ilike, inArray, or } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { cours, ressources, seances, thematiques } from "@/lib/db/schema";
+import {
+  ALL_ENTITY_TYPES,
+  ALL_RESSOURCE_TYPES,
+  type EntityType,
+  type RessourceType,
+  type SearchResult,
+} from "@/lib/search-types";
 
-export type SearchResult = {
-  type: "cours" | "thematique" | "ressource" | "seance";
-  title: string;
-  subtitle?: string | null;
-  href: string;
+export {
+  ALL_ENTITY_TYPES,
+  ALL_RESSOURCE_TYPES,
+  type EntityType,
+  type RessourceType,
+  type SearchResult,
 };
-
-export type EntityType = SearchResult["type"];
-export type RessourceType = "video" | "pdf" | "lien";
-
-export const ALL_ENTITY_TYPES: EntityType[] = [
-  "cours",
-  "thematique",
-  "ressource",
-  "seance",
-];
-export const ALL_RESSOURCE_TYPES: RessourceType[] = ["video", "pdf", "lien"];
 
 export async function searchCatalogue(
   query: string,
