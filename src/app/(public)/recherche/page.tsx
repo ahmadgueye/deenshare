@@ -2,8 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { searchCatalogue, type SearchResult } from "@/lib/db/queries/search";
+import {
+  ALL_ENTITY_TYPES,
+  ALL_RESSOURCE_TYPES,
+  searchCatalogue,
+  type EntityType,
+  type RessourceType,
+  type SearchResult,
+} from "@/lib/db/queries/search";
 
 export const metadata: Metadata = {
   title: "Recherche — DeenShare",
@@ -16,13 +25,48 @@ const typeLabels: Record<SearchResult["type"], string> = {
   seance: "Séance",
 };
 
-type Props = {
-  searchParams: Promise<{ q?: string }>;
+const ressourceTypeLabels: Record<RessourceType, string> = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
 };
 
+type Props = {
+  searchParams: Promise<{
+    q?: string;
+    types?: string | string[];
+    rtype?: string | string[];
+  }>;
+};
+
+function toArray(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
 export default async function RecherchePage({ searchParams }: Props) {
-  const { q = "" } = await searchParams;
-  const results = q ? await searchCatalogue(q) : [];
+  const params = await searchParams;
+  const q = params.q ?? "";
+  const typesValues = toArray(params.types);
+  const rtypeValues = toArray(params.rtype);
+
+  const selectedTypes = typesValues.length
+    ? (typesValues.filter((t) =>
+        ALL_ENTITY_TYPES.includes(t as EntityType)
+      ) as EntityType[])
+    : ALL_ENTITY_TYPES;
+  const selectedRessourceTypes = rtypeValues.length
+    ? (rtypeValues.filter((t) =>
+        ALL_RESSOURCE_TYPES.includes(t as RessourceType)
+      ) as RessourceType[])
+    : ALL_RESSOURCE_TYPES;
+
+  const results = q
+    ? await searchCatalogue(q, {
+        types: selectedTypes,
+        ressourceTypes: selectedRessourceTypes,
+      })
+    : [];
 
   return (
     <div>
@@ -38,6 +82,43 @@ export default async function RecherchePage({ searchParams }: Props) {
           placeholder="Rechercher un cours, une thématique, une ressource…"
           autoFocus
         />
+
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
+          <div>
+            <p className="mb-2 text-sm font-medium">Type de contenu</p>
+            <div className="flex flex-col gap-2">
+              {ALL_ENTITY_TYPES.map((type) => (
+                <label key={type} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    name="types"
+                    value={type}
+                    defaultChecked={selectedTypes.includes(type)}
+                  />
+                  {typeLabels[type]}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-sm font-medium">Type de ressource</p>
+            <div className="flex flex-col gap-2">
+              {ALL_RESSOURCE_TYPES.map((type) => (
+                <label key={type} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    name="rtype"
+                    value={type}
+                    defaultChecked={selectedRessourceTypes.includes(type)}
+                  />
+                  {ressourceTypeLabels[type]}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <Button type="submit" className="mt-4">
+          Rechercher
+        </Button>
       </form>
 
       {q && (

@@ -1,4 +1,4 @@
-import { ilike, or } from "drizzle-orm";
+import { and, ilike, inArray, or } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { cours, ressources, seances, thematiques } from "@/lib/db/schema";
@@ -10,42 +10,74 @@ export type SearchResult = {
   href: string;
 };
 
-export async function searchCatalogue(query: string): Promise<SearchResult[]> {
+export type EntityType = SearchResult["type"];
+export type RessourceType = "video" | "pdf" | "lien";
+
+export const ALL_ENTITY_TYPES: EntityType[] = [
+  "cours",
+  "thematique",
+  "ressource",
+  "seance",
+];
+export const ALL_RESSOURCE_TYPES: RessourceType[] = ["video", "pdf", "lien"];
+
+export async function searchCatalogue(
+  query: string,
+  options?: { types?: EntityType[]; ressourceTypes?: RessourceType[] }
+): Promise<SearchResult[]> {
   const q = query.trim();
   if (q.length < 2) return [];
+
+  const types = options?.types?.length ? options.types : ALL_ENTITY_TYPES;
+  const ressourceTypes = options?.ressourceTypes?.length
+    ? options.ressourceTypes
+    : ALL_RESSOURCE_TYPES;
 
   const pattern = `%${q}%`;
 
   const [coursResults, thematiqueResults, ressourceResults, seanceResults] =
     await Promise.all([
-      db
-        .select()
-        .from(cours)
-        .where(or(ilike(cours.title, pattern), ilike(cours.description, pattern)))
-        .limit(5),
-      db.query.thematiques.findMany({
-        where: (t, { ilike: like, or: orOp }) =>
-          orOp(like(t.title, pattern), like(t.description, pattern)),
-        with: { cours: true },
-        limit: 5,
-      }),
-      db
-        .select()
-        .from(ressources)
-        .where(
-          or(
-            ilike(ressources.title, pattern),
-            ilike(ressources.description, pattern)
-          )
-        )
-        .limit(5),
-      db
-        .select()
-        .from(seances)
-        .where(
-          or(ilike(seances.title, pattern), ilike(seances.summary, pattern))
-        )
-        .limit(5),
+      types.includes("cours")
+        ? db
+            .select()
+            .from(cours)
+            .where(
+              or(ilike(cours.title, pattern), ilike(cours.description, pattern))
+            )
+            .limit(20)
+        : Promise.resolve([]),
+      types.includes("thematique")
+        ? db.query.thematiques.findMany({
+            where: (t, { ilike: like, or: orOp }) =>
+              orOp(like(t.title, pattern), like(t.description, pattern)),
+            with: { cours: true },
+            limit: 20,
+          })
+        : Promise.resolve([]),
+      types.includes("ressource")
+        ? db
+            .select()
+            .from(ressources)
+            .where(
+              and(
+                or(
+                  ilike(ressources.title, pattern),
+                  ilike(ressources.description, pattern)
+                ),
+                inArray(ressources.type, ressourceTypes)
+              )
+            )
+            .limit(20)
+        : Promise.resolve([]),
+      types.includes("seance")
+        ? db
+            .select()
+            .from(seances)
+            .where(
+              or(ilike(seances.title, pattern), ilike(seances.summary, pattern))
+            )
+            .limit(20)
+        : Promise.resolve([]),
     ]);
 
   return [
