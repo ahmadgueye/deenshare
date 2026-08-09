@@ -53,6 +53,7 @@ export function ThematiqueForm({
           <Select
             name="coursId"
             defaultValue={thematique?.coursId}
+            items={coursOptions.map((c) => ({ value: c.id, label: c.title }))}
             required
           >
             <SelectTrigger id="coursId" className="w-full">

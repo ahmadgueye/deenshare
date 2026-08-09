@@ -58,6 +58,10 @@ export function RessourceForm({
           <Select
             name="thematiqueId"
             defaultValue={ressource?.thematiqueId}
+            items={thematiqueOptions.map((t) => ({
+              value: t.id,
+              label: `${t.coursTitle} · ${t.title}`,
+            }))}
             required
           >
             <SelectTrigger id="thematiqueId" className="w-full">
@@ -83,7 +87,12 @@ export function RessourceForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="type">Type</FieldLabel>
-          <Select name="type" defaultValue={ressource?.type ?? "lien"} required>
+          <Select
+            name="type"
+            defaultValue={ressource?.type ?? "lien"}
+            items={typeLabels}
+            required
+          >
             <SelectTrigger id="type" className="w-full">
               <SelectValue />
             </SelectTrigger>

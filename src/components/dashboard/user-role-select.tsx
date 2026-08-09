@@ -36,7 +36,12 @@ export function UserRoleSelect({
   }
 
   return (
-    <Select value={role} onValueChange={handleChange} disabled={isPending}>
+    <Select
+      value={role}
+      onValueChange={handleChange}
+      disabled={isPending}
+      items={roleLabels}
+    >
       <SelectTrigger className="w-40">
         <SelectValue />
       </SelectTrigger>
