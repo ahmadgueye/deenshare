@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
+import { MarkdownContent } from "@/components/public/markdown-content";
 import { RessourceItem } from "@/components/public/ressource-item";
 import { getSeanceBySlug } from "@/lib/db/queries/seances";
 
@@ -45,7 +46,11 @@ export default async function SeanceDetailPage({ params }: Props) {
           })}
         </p>
       )}
-      {s.summary && <p className="mt-4 max-w-2xl">{s.summary}</p>}
+      {s.summary && (
+        <div className="mt-4">
+          <MarkdownContent content={s.summary} />
+        </div>
+      )}
 
       {s.seanceThematiques.length > 0 && (
         <>

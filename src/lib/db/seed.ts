@@ -112,14 +112,14 @@ async function main() {
         title: "Révision Aqida — Le Tawhid",
         sessionDate: "2026-08-02",
         summary:
-          "Rappel des catégories du Tawhid et des points souvent confondus. Questions/réponses en fin de séance.",
+          "Rappel des **catégories du Tawhid** et des points souvent confondus :\n\n- Tawhid al-Rububiyya\n- Tawhid al-Uluhiyya\n- Tawhid al-Asma wa-Sifat\n\nQuestions/réponses en fin de séance.",
       },
       {
         slug: slugify("Révision Fiqh — La prière"),
         title: "Révision Fiqh — La prière",
         sessionDate: "2026-08-09",
         summary:
-          "Reprise des piliers et obligations de la prière, avec des cas pratiques.",
+          "Reprise des **piliers et obligations** de la prière, avec des cas pratiques. Voir aussi la [fiche récapitulative](https://drive.google.com/example-jeune-pdf) partagée en séance.",
       },
     ])
     .returning();

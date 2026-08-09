@@ -82,7 +82,10 @@ export function SeanceForm({
             defaultValue={seance?.summary ?? ""}
             rows={4}
           />
-          <FieldDescription>Facultatif.</FieldDescription>
+          <FieldDescription>
+            Facultatif. Markdown supporté : **gras**, listes (- item), liens
+            [texte](url).
+          </FieldDescription>
         </Field>
 
         <Field>
