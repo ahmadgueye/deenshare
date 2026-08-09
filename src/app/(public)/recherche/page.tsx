@@ -113,16 +113,17 @@ export default async function RecherchePage({ searchParams }: Props) {
         Recherche
       </h1>
 
-      <form method="get" className="mt-6 max-w-md">
+      <form method="get" className="mt-6">
         <Input
           type="search"
           name="q"
           defaultValue={q}
           placeholder="Rechercher un cours, une thématique, une ressource…"
           autoFocus
+          className="max-w-md"
         />
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2">
+        <div className="mt-6 grid max-w-md grid-cols-2 gap-6">
           <div>
             <p className="mb-2 text-sm font-medium">Type de contenu</p>
             <div className="flex flex-col gap-2">
