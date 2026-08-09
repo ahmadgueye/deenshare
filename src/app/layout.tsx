@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -21,8 +22,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "DeenShare",
-  description: "Catalogue des ressources et séances de révision",
+  description: defaultDescription,
+  openGraph: {
+    ...siteOpenGraph,
+    title: "DeenShare",
+    description: defaultDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { RessourceItem } from "@/components/public/ressource-item";
 import { getThematiqueBySlug } from "@/lib/db/queries/thematiques";
+import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -14,7 +15,13 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
   const t = await getThematiqueBySlug(slug);
-  return { title: t ? `${t.title} — DeenShare` : "Thématique — DeenShare" };
+  const title = t?.title ?? "Thématique";
+  const description = t?.description ?? defaultDescription;
+  return {
+    title: `${title} — DeenShare`,
+    description,
+    openGraph: { ...siteOpenGraph, title, description },
+  };
 }
 
 export default async function ThematiqueDetailPage({ params }: Props) {

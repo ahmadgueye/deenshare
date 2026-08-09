@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCoursBySlug } from "@/lib/db/queries/cours";
+import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -14,7 +15,13 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
   const c = await getCoursBySlug(slug);
-  return { title: c ? `${c.title} — DeenShare` : "Cours — DeenShare" };
+  const title = c?.title ?? "Cours";
+  const description = c?.description ?? defaultDescription;
+  return {
+    title: `${title} — DeenShare`,
+    description,
+    openGraph: { ...siteOpenGraph, title, description },
+  };
 }
 
 export default async function CoursDetailPage({ params }: Props) {

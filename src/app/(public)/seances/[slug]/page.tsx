@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { MarkdownContent } from "@/components/public/markdown-content";
 import { RessourceItem } from "@/components/public/ressource-item";
 import { getSeanceBySlug } from "@/lib/db/queries/seances";
+import { defaultDescription, siteOpenGraph, stripMarkdown } from "@/lib/metadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -16,7 +17,13 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
   const s = await getSeanceBySlug(slug);
-  return { title: s ? `${s.title} — DeenShare` : "Séance — DeenShare" };
+  const title = s?.title ?? "Séance";
+  const description = s?.summary ? stripMarkdown(s.summary) : defaultDescription;
+  return {
+    title: `${title} — DeenShare`,
+    description,
+    openGraph: { ...siteOpenGraph, title, description },
+  };
 }
 
 export default async function SeanceDetailPage({ params }: Props) {
