@@ -8,19 +8,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export function EntityCard({
   href,
   title,
   description,
+  accent = false,
 }: {
   href: string;
   title: string;
   description?: string | null;
+  accent?: boolean;
 }) {
   return (
     <Link href={href}>
-      <Card className="h-full transition-colors hover:bg-muted">
+      <Card
+        className={cn(
+          "h-full transition-colors hover:bg-muted",
+          accent &&
+            "border-emerald-200 bg-emerald-50 hover:bg-emerald-100 dark:border-emerald-900 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/60"
+        )}
+      >
         <CardHeader>
           <CardTitle className="font-heading">{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}

@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq, gte, isNull, lt, or, sql } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { seances } from "@/lib/db/schema";
@@ -6,6 +6,22 @@ import { seances } from "@/lib/db/schema";
 export async function getAllSeances() {
   return db.query.seances.findMany({
     orderBy: [desc(seances.sessionDate)],
+  });
+}
+
+export async function getUpcomingSeances(limit?: number) {
+  return db.query.seances.findMany({
+    where: gte(seances.sessionDate, sql`CURRENT_DATE`),
+    orderBy: [asc(seances.sessionDate)],
+    limit,
+  });
+}
+
+export async function getPastSeances(limit?: number) {
+  return db.query.seances.findMany({
+    where: or(lt(seances.sessionDate, sql`CURRENT_DATE`), isNull(seances.sessionDate)),
+    orderBy: [sql`${seances.sessionDate} DESC NULLS LAST`],
+    limit,
   });
 }
 

@@ -11,6 +11,15 @@ export function isNavActive(pathname: string, href: string, exact = false) {
     : pathname === href || pathname.startsWith(`${href}/`)
 }
 
+export function formatSeanceDate(sessionDate: string | null) {
+  if (!sessionDate) return null
+  return new Date(sessionDate).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
+}
+
 export function slugify(input: string) {
   return input
     .normalize("NFD")
