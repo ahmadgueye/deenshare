@@ -1,14 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  BookOpen,
-  Calendar,
-  FileText,
-  Link as LinkIcon,
-  ListTree,
-  Video,
-  type LucideIcon,
-} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,31 +31,16 @@ const ressourceTypeLabels: Record<RessourceType, string> = {
   lien: "Lien",
 };
 
-const typeIcons: Record<SearchResult["type"], LucideIcon> = {
-  cours: BookOpen,
-  thematique: ListTree,
-  ressource: LinkIcon,
-  seance: Calendar,
-};
-
-const ressourceTypeIcons: Record<RessourceType, LucideIcon> = {
-  video: Video,
-  pdf: FileText,
-  lien: LinkIcon,
-};
-
 function resultDisplay(r: SearchResult) {
   if (r.type === "ressource") {
     const rtype = (r.subtitle as RessourceType) ?? "lien";
     return {
       label: ressourceTypeLabels[rtype] ?? typeLabels.ressource,
-      Icon: ressourceTypeIcons[rtype] ?? typeIcons.ressource,
       subtitle: null,
     };
   }
   return {
     label: typeLabels[r.type],
-    Icon: typeIcons[r.type],
     subtitle: r.subtitle,
   };
 }
@@ -175,23 +151,20 @@ export default async function RecherchePage({ searchParams }: Props) {
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {results.map((r, i) => {
-          const { label, Icon, subtitle } = resultDisplay(r);
+          const { label, subtitle } = resultDisplay(r);
           return (
             <Link
               key={`${r.type}-${i}`}
               href={r.href}
-              className="flex items-start gap-3 border p-4 transition-colors hover:bg-muted"
+              className="border p-4 transition-colors hover:bg-muted"
             >
-              <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-              <div className="flex-1">
-                <Badge variant="secondary">{label}</Badge>
-                <div className="mt-1 font-medium">{r.title}</div>
-                {subtitle && (
-                  <div className="text-sm text-muted-foreground">
-                    {subtitle}
-                  </div>
-                )}
-              </div>
+              <Badge variant="secondary">{label}</Badge>
+              <div className="mt-1 font-medium">{r.title}</div>
+              {subtitle && (
+                <div className="text-sm text-muted-foreground">
+                  {subtitle}
+                </div>
+              )}
             </Link>
           );
         })}
