@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { getCurrentProfile } from "@/lib/auth/get-session";
 
 export async function SiteHeader() {
@@ -33,7 +34,10 @@ export async function SiteHeader() {
             {authLabel}
           </Button>
         </nav>
-        <MobileNav authHref={authHref} authLabel={authLabel} />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <MobileNav authHref={authHref} authLabel={authLabel} />
+        </div>
       </div>
     </header>
   );

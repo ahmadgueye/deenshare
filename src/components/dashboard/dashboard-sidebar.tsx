@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { signOutAction } from "@/lib/actions/auth";
 
 const navItems = [
@@ -51,11 +52,14 @@ export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
           )}
         </nav>
       </div>
-      <form action={signOutAction}>
-        <Button type="submit" variant="outline" size="sm" className="w-full">
-          Se déconnecter
-        </Button>
-      </form>
+      <div className="flex items-center gap-2">
+        <form action={signOutAction} className="flex-1">
+          <Button type="submit" variant="outline" size="sm" className="w-full">
+            Se déconnecter
+          </Button>
+        </form>
+        <ThemeToggle />
+      </div>
     </aside>
   );
 }
