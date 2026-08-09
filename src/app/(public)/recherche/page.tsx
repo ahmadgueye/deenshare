@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BookOpen, Calendar, ListTree, type LucideIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
   type RessourceType,
   type SearchResult,
 } from "@/lib/db/queries/search";
+import { ressourceTypeConfig } from "@/lib/ressource-types";
 
 export const metadata: Metadata = {
   title: "Recherche — DeenShare",
@@ -25,22 +27,22 @@ const typeLabels: Record<SearchResult["type"], string> = {
   seance: "Séance",
 };
 
-const ressourceTypeLabels: Record<RessourceType, string> = {
-  video: "Vidéo",
-  pdf: "PDF",
-  lien: "Lien",
-};
+const entityIcons: Record<Exclude<SearchResult["type"], "ressource">, LucideIcon> =
+  {
+    cours: BookOpen,
+    thematique: ListTree,
+    seance: Calendar,
+  };
 
 function resultDisplay(r: SearchResult) {
   if (r.type === "ressource") {
     const rtype = (r.subtitle as RessourceType) ?? "lien";
-    return {
-      label: ressourceTypeLabels[rtype] ?? typeLabels.ressource,
-      subtitle: null,
-    };
+    const config = ressourceTypeConfig[rtype];
+    return { label: config.label, Icon: config.icon, subtitle: null };
   }
   return {
     label: typeLabels[r.type],
+    Icon: entityIcons[r.type],
     subtitle: r.subtitle,
   };
 }
@@ -125,7 +127,7 @@ export default async function RecherchePage({ searchParams }: Props) {
                     value={type}
                     defaultChecked={selectedRessourceTypes.includes(type)}
                   />
-                  {ressourceTypeLabels[type]}
+                  {ressourceTypeConfig[type].label}
                 </label>
               ))}
             </div>
@@ -151,14 +153,17 @@ export default async function RecherchePage({ searchParams }: Props) {
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {results.map((r, i) => {
-          const { label, subtitle } = resultDisplay(r);
+          const { label, Icon, subtitle } = resultDisplay(r);
           return (
             <Link
               key={`${r.type}-${i}`}
               href={r.href}
               className="border p-4 transition-colors hover:bg-muted"
             >
-              <Badge variant="secondary">{label}</Badge>
+              <span className="inline-flex items-center gap-1.5">
+                <Icon className="size-3.5 text-muted-foreground" />
+                <Badge variant="secondary">{label}</Badge>
+              </span>
               <div className="mt-1 font-medium">{r.title}</div>
               {subtitle && (
                 <div className="text-sm text-muted-foreground">

@@ -11,9 +11,7 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const t = await getThematiqueBySlug(slug);
   const title = t?.title ?? "Thématique";
@@ -45,7 +43,7 @@ export default async function ThematiqueDetailPage({ params }: Props) {
         / <span className="text-foreground">{t.title}</span>
       </nav>
 
-      <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight">
+      <h1 className="mt-4 font-heading text-3xl font-semibold tracking-tight">
         {t.title}
       </h1>
       {t.description && (
