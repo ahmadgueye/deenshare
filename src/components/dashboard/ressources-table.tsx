@@ -35,21 +35,40 @@ type RessourceRow = {
   title: string;
   type: RessourceType;
   createdAt: Date;
-  thematique: { title: string; cours: { title: string } };
+  thematique: { id: string; title: string; cours: { title: string } };
 };
 
 export function RessourcesTable({ data }: { data: RessourceRow[] }) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [thematiqueFilter, setThematiqueFilter] = useState("all");
+
+  const thematiqueOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const r of data) {
+      map.set(r.thematique.id, `${r.thematique.cours.title} · ${r.thematique.title}`);
+    }
+    return Array.from(map, ([id, label]) => ({ id, label }));
+  }, [data]);
+
+  const thematiqueFilterItems = useMemo(
+    () => ({
+      all: "Toutes les thématiques",
+      ...Object.fromEntries(thematiqueOptions.map((t) => [t.id, t.label])),
+    }),
+    [thematiqueOptions]
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return data.filter((r) => {
       const matchesType = typeFilter === "all" || r.type === typeFilter;
+      const matchesThematique =
+        thematiqueFilter === "all" || r.thematique.id === thematiqueFilter;
       const matchesSearch = !q || r.title.toLowerCase().includes(q);
-      return matchesType && matchesSearch;
+      return matchesType && matchesThematique && matchesSearch;
     });
-  }, [data, search, typeFilter]);
+  }, [data, search, typeFilter, thematiqueFilter]);
 
   return (
     <div>
@@ -73,6 +92,23 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
             {Object.entries(typeLabels).map(([value, label]) => (
               <SelectItem key={value} value={value}>
                 {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={thematiqueFilter}
+          onValueChange={(v) => v && setThematiqueFilter(v)}
+          items={thematiqueFilterItems}
+        >
+          <SelectTrigger className="w-56">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Toutes les thématiques</SelectItem>
+            {thematiqueOptions.map((t) => (
+              <SelectItem key={t.id} value={t.id}>
+                {t.label}
               </SelectItem>
             ))}
           </SelectContent>
