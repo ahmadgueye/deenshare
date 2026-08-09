@@ -97,7 +97,6 @@ export default async function RecherchePage({ searchParams }: Props) {
           name="q"
           defaultValue={q}
           placeholder="Rechercher un cours, une thématique, une ressource…"
-          autoFocus
           className="max-w-md"
         />
 
