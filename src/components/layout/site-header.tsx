@@ -1,10 +1,13 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { getCurrentProfile } from "@/lib/auth/get-session";
 
 export async function SiteHeader() {
   const profile = await getCurrentProfile();
+  const authHref = profile ? "/dashboard" : "/login";
+  const authLabel = profile ? "Tableau de bord" : "Se connecter";
 
   return (
     <header className="border-b">
@@ -12,7 +15,7 @@ export async function SiteHeader() {
         <Link href="/" className="font-heading text-lg font-semibold tracking-tight">
           DeenShare
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-muted-foreground">
+        <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
           <Link href="/cours" className="hover:text-foreground">
             Cours
           </Link>
@@ -26,14 +29,11 @@ export async function SiteHeader() {
           >
             Recherche
           </Link>
-          <Button
-            render={<Link href={profile ? "/dashboard" : "/login"} />}
-            nativeButton={false}
-            size="sm"
-          >
-            {profile ? "Tableau de bord" : "Se connecter"}
+          <Button render={<Link href={authHref} />} nativeButton={false} size="sm">
+            {authLabel}
           </Button>
         </nav>
+        <MobileNav authHref={authHref} authLabel={authLabel} />
       </div>
     </header>
   );

@@ -12,6 +12,7 @@ import { GoogleLoginButton } from "@/components/public/google-login-button";
 
 export const metadata: Metadata = {
   title: "Connexion — DeenShare",
+  robots: { index: false, follow: false },
 };
 
 export default function LoginPage() {
