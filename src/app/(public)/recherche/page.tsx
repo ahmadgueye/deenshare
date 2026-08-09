@@ -61,7 +61,8 @@ export default async function RecherchePage({ searchParams }: Props) {
       ) as RessourceType[])
     : ALL_RESSOURCE_TYPES;
 
-  const results = q
+  const hasSearched = params.q !== undefined;
+  const results = hasSearched
     ? await searchCatalogue(q, {
         types: selectedTypes,
         ressourceTypes: selectedRessourceTypes,
@@ -121,10 +122,15 @@ export default async function RecherchePage({ searchParams }: Props) {
         </Button>
       </form>
 
-      {q && (
+      {hasSearched && (
         <p className="mt-6 text-sm text-muted-foreground">
-          {results.length} résultat{results.length > 1 ? "s" : ""} pour «{" "}
-          {q} »
+          {results.length} résultat{results.length > 1 ? "s" : ""}
+          {q && (
+            <>
+              {" "}
+              pour « {q} »
+            </>
+          )}
         </p>
       )}
 

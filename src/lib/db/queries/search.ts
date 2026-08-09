@@ -26,7 +26,6 @@ export async function searchCatalogue(
   options?: { types?: EntityType[]; ressourceTypes?: RessourceType[] }
 ): Promise<SearchResult[]> {
   const q = query.trim();
-  if (q.length < 2) return [];
 
   const types = options?.types?.length ? options.types : ALL_ENTITY_TYPES;
   const ressourceTypes = options?.ressourceTypes?.length
@@ -34,6 +33,8 @@ export async function searchCatalogue(
     : ALL_RESSOURCE_TYPES;
 
   const pattern = `%${q}%`;
+  // Empty query = browse by filters only, no text condition to apply.
+  const textCondition = q.length > 0;
 
   const [coursResults, thematiqueResults, ressourceResults, seanceResults] =
     await Promise.all([
@@ -42,14 +43,21 @@ export async function searchCatalogue(
             .select()
             .from(cours)
             .where(
-              or(ilike(cours.title, pattern), ilike(cours.description, pattern))
+              textCondition
+                ? or(
+                    ilike(cours.title, pattern),
+                    ilike(cours.description, pattern)
+                  )
+                : undefined
             )
             .limit(20)
         : Promise.resolve([]),
       types.includes("thematique")
         ? db.query.thematiques.findMany({
-            where: (t, { ilike: like, or: orOp }) =>
-              orOp(like(t.title, pattern), like(t.description, pattern)),
+            where: textCondition
+              ? (t, { ilike: like, or: orOp }) =>
+                  orOp(like(t.title, pattern), like(t.description, pattern))
+              : undefined,
             with: { cours: true },
             limit: 20,
           })
@@ -60,10 +68,12 @@ export async function searchCatalogue(
             .from(ressources)
             .where(
               and(
-                or(
-                  ilike(ressources.title, pattern),
-                  ilike(ressources.description, pattern)
-                ),
+                textCondition
+                  ? or(
+                      ilike(ressources.title, pattern),
+                      ilike(ressources.description, pattern)
+                    )
+                  : undefined,
                 inArray(ressources.type, ressourceTypes)
               )
             )
@@ -74,7 +84,12 @@ export async function searchCatalogue(
             .select()
             .from(seances)
             .where(
-              or(ilike(seances.title, pattern), ilike(seances.summary, pattern))
+              textCondition
+                ? or(
+                    ilike(seances.title, pattern),
+                    ilike(seances.summary, pattern)
+                  )
+                : undefined
             )
             .limit(20)
         : Promise.resolve([]),
