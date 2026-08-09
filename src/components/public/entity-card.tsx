@@ -24,7 +24,7 @@ export function EntityCard({
         <CardHeader>
           <CardTitle className="font-heading">{title}</CardTitle>
           {description && <CardDescription>{description}</CardDescription>}
-          <CardAction>
+          <CardAction className="self-center">
             <ChevronRight className="size-4 text-muted-foreground" />
           </CardAction>
         </CardHeader>

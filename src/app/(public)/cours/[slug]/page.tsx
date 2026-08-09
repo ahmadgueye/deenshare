@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { BackButton } from "@/components/public/back-button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { EntityCard } from "@/components/public/entity-card";
 import { getCoursBySlug } from "@/lib/db/queries/cours";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
@@ -58,15 +58,12 @@ export default async function CoursDetailPage({ params }: Props) {
       ) : (
         <div className="mt-4 grid gap-3">
           {c.thematiques.map((t) => (
-            <Link key={t.id} href={`/thematiques/${t.slug}`}>
-              <Card className="transition-colors hover:bg-muted">
-                <CardHeader>
-                  <CardTitle className="font-heading text-base">
-                    {t.title}
-                  </CardTitle>
-                </CardHeader>
-              </Card>
-            </Link>
+            <EntityCard
+              key={t.id}
+              href={`/thematiques/${t.slug}`}
+              title={t.title}
+              description={t.description}
+            />
           ))}
         </div>
       )}
