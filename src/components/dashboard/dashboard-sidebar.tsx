@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Link as LinkIcon,
   ListTree,
+  Quote,
   Users,
 } from "lucide-react";
 
@@ -20,6 +21,7 @@ const navItems = [
   { href: "/dashboard/cours", label: "Cours", icon: BookOpen },
   { href: "/dashboard/thematiques", label: "Thématiques", icon: ListTree },
   { href: "/dashboard/ressources", label: "Ressources", icon: LinkIcon },
+  { href: "/dashboard/hadiths", label: "Hadiths", icon: Quote },
   { href: "/dashboard/seances", label: "Séances", icon: Calendar },
 ];
 

@@ -19,6 +19,7 @@ const typeLabels: Record<SearchResult["type"], string> = {
   thematique: "Thématiques",
   ressource: "Ressources",
   seance: "Séances",
+  hadith: "Hadiths",
 };
 
 export function SearchCommand() {

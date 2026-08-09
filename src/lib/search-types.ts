@@ -1,5 +1,5 @@
 export type SearchResult = {
-  type: "cours" | "thematique" | "ressource" | "seance";
+  type: "cours" | "thematique" | "ressource" | "seance" | "hadith";
   title: string;
   subtitle?: string | null;
   href: string;
@@ -13,5 +13,6 @@ export const ALL_ENTITY_TYPES: EntityType[] = [
   "thematique",
   "ressource",
   "seance",
+  "hadith",
 ];
 export const ALL_RESSOURCE_TYPES: RessourceType[] = ["video", "pdf", "lien"];

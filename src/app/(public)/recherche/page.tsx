@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, Calendar, ListTree, type LucideIcon } from "lucide-react";
+import { BookOpen, Calendar, ListTree, Quote, type LucideIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { SearchForm } from "@/components/public/search-form";
@@ -23,6 +23,7 @@ const typeLabels: Record<SearchResult["type"], string> = {
   thematique: "Thématique",
   ressource: "Ressource",
   seance: "Séance",
+  hadith: "Hadith",
 };
 
 const entityIcons: Record<Exclude<SearchResult["type"], "ressource">, LucideIcon> =
@@ -30,6 +31,7 @@ const entityIcons: Record<Exclude<SearchResult["type"], "ressource">, LucideIcon
     cours: BookOpen,
     thematique: ListTree,
     seance: Calendar,
+    hadith: Quote,
   };
 
 function resultDisplay(r: SearchResult) {

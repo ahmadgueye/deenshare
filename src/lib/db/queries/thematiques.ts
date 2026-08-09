@@ -24,6 +24,7 @@ export async function getThematiqueBySlug(slug: string) {
     with: {
       cours: true,
       ressources: true,
+      hadiths: true,
     },
   });
 

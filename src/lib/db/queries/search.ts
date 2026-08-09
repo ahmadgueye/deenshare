@@ -1,7 +1,7 @@
 import { and, ilike, inArray, or } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { cours, ressources, seances, thematiques } from "@/lib/db/schema";
+import { cours, hadiths, ressources, seances, thematiques } from "@/lib/db/schema";
 import {
   ALL_ENTITY_TYPES,
   ALL_RESSOURCE_TYPES,
@@ -33,8 +33,13 @@ export async function searchCatalogue(
   // Empty query = browse by filters only, no text condition to apply.
   const textCondition = q.length > 0;
 
-  const [coursResults, thematiqueResults, ressourceResults, seanceResults] =
-    await Promise.all([
+  const [
+    coursResults,
+    thematiqueResults,
+    ressourceResults,
+    seanceResults,
+    hadithResults,
+  ] = await Promise.all([
       types.includes("cours")
         ? db
             .select()
@@ -90,6 +95,21 @@ export async function searchCatalogue(
             )
             .limit(20)
         : Promise.resolve([]),
+      types.includes("hadith")
+        ? db
+            .select()
+            .from(hadiths)
+            .where(
+              textCondition
+                ? or(
+                    ilike(hadiths.title, pattern),
+                    ilike(hadiths.translationFr, pattern),
+                    ilike(hadiths.narrator, pattern)
+                  )
+                : undefined
+            )
+            .limit(20)
+        : Promise.resolve([]),
     ]);
 
   return [
@@ -116,6 +136,12 @@ export async function searchCatalogue(
       title: s.title,
       subtitle: s.sessionDate,
       href: `/seances/${s.slug}`,
+    })),
+    ...hadithResults.map((h) => ({
+      type: "hadith" as const,
+      title: h.title,
+      subtitle: h.narrator,
+      href: `/hadiths/${h.slug}`,
     })),
   ];
 }

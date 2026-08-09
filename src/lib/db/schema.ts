@@ -78,6 +78,26 @@ export const ressources = pgTable("ressources", {
     .defaultNow(),
 });
 
+export const hadiths = pgTable("hadiths", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  thematiqueId: uuid("thematique_id")
+    .notNull()
+    .references(() => thematiques.id, { onDelete: "cascade" }),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  arabicText: text("arabic_text").notNull(),
+  translationFr: text("translation_fr").notNull(),
+  narrator: text("narrator").notNull(),
+  source: text("source"),
+  addedBy: uuid("added_by").references(() => profiles.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export const seances = pgTable("seances", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
   slug: text("slug").notNull().unique(),
@@ -131,6 +151,7 @@ export const thematiquesRelations = relations(
       references: [cours.id],
     }),
     ressources: many(ressources),
+    hadiths: many(hadiths),
     seanceThematiques: many(seanceThematiques),
   })
 );
@@ -141,6 +162,13 @@ export const ressourcesRelations = relations(ressources, ({ one, many }) => ({
     references: [thematiques.id],
   }),
   seanceRessources: many(seanceRessources),
+}));
+
+export const hadithsRelations = relations(hadiths, ({ one }) => ({
+  thematique: one(thematiques, {
+    fields: [hadiths.thematiqueId],
+    references: [thematiques.id],
+  }),
 }));
 
 export const seancesRelations = relations(seances, ({ many }) => ({

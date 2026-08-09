@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { BackButton } from "@/components/public/back-button";
+import { HadithCard } from "@/components/public/hadith-card";
 import { RessourceItem } from "@/components/public/ressource-item";
 import { getThematiqueBySlug } from "@/lib/db/queries/thematiques";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
@@ -64,6 +65,25 @@ export default async function ThematiqueDetailPage({ params }: Props) {
               type={r.type}
               url={r.url}
               description={r.description}
+            />
+          ))}
+        </div>
+      )}
+
+      <h2 className="mt-10 font-heading text-xl font-semibold">Hadiths</h2>
+      {t.hadiths.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          Aucun hadith pour cette thématique pour le moment.
+        </p>
+      ) : (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {t.hadiths.map((h) => (
+            <HadithCard
+              key={h.id}
+              slug={h.slug}
+              title={h.title}
+              arabicText={h.arabicText}
+              translationFr={h.translationFr}
             />
           ))}
         </div>
