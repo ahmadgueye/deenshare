@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn, isNavActive } from "@/lib/utils";
 
 const links = [
   { href: "/cours", label: "Cours" },
@@ -27,6 +29,7 @@ export function MobileNav({
   authLabel: string;
 }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -47,7 +50,10 @@ export function MobileNav({
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="px-2 py-2 text-sm text-muted-foreground hover:text-foreground"
+              className={cn(
+                "px-2 py-2 text-sm text-muted-foreground hover:text-foreground",
+                isNavActive(pathname, link.href) && "font-medium text-foreground"
+              )}
             >
               {link.label}
             </Link>

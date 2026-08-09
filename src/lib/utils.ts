@@ -5,6 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function isNavActive(pathname: string, href: string, exact = false) {
+  return exact
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`)
+}
+
 export function slugify(input: string) {
   return input
     .normalize("NFD")

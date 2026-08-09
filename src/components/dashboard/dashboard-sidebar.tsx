@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   BookOpen,
   Calendar,
@@ -10,6 +13,7 @@ import {
 
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { SignOutButton } from "@/components/dashboard/sign-out-button";
+import { cn, isNavActive } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
@@ -20,6 +24,8 @@ const navItems = [
 ];
 
 export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
+  const pathname = usePathname();
+
   return (
     <aside className="flex w-56 shrink-0 flex-col justify-between border-r p-4">
       <div>
@@ -34,7 +40,11 @@ export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-2 px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+              className={cn(
+                "flex items-center gap-2 px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground",
+                isNavActive(pathname, href, href === "/dashboard") &&
+                  "bg-muted text-foreground"
+              )}
             >
               <Icon className="size-4" />
               {label}
@@ -43,7 +53,11 @@ export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
           {isAdmin && (
             <Link
               href="/dashboard/utilisateurs"
-              className="flex items-center gap-2 px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+              className={cn(
+                "flex items-center gap-2 px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground",
+                isNavActive(pathname, "/dashboard/utilisateurs") &&
+                  "bg-muted text-foreground"
+              )}
             >
               <Users className="size-4" />
               Utilisateurs
