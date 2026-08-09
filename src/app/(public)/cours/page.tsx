@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { EntityCard } from "@/components/public/entity-card";
 import { getAllCours } from "@/lib/db/queries/cours";
 
 export const metadata: Metadata = {
@@ -32,16 +26,12 @@ export default async function CoursListPage() {
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {coursList.map((c) => (
-            <Link key={c.id} href={`/cours/${c.slug}`}>
-              <Card className="h-full transition-colors hover:bg-muted">
-                <CardHeader>
-                  <CardTitle className="font-heading">{c.title}</CardTitle>
-                  {c.description && (
-                    <CardDescription>{c.description}</CardDescription>
-                  )}
-                </CardHeader>
-              </Card>
-            </Link>
+            <EntityCard
+              key={c.id}
+              href={`/cours/${c.slug}`}
+              title={c.title}
+              description={c.description}
+            />
           ))}
         </div>
       )}

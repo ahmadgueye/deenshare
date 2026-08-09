@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { EntityCard } from "@/components/public/entity-card";
 import { getAllSeances } from "@/lib/db/queries/seances";
 
 export const metadata: Metadata = {
@@ -32,22 +26,20 @@ export default async function SeancesListPage() {
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {seancesList.map((s) => (
-            <Link key={s.id} href={`/seances/${s.slug}`}>
-              <Card className="h-full transition-colors hover:bg-muted">
-                <CardHeader>
-                  <CardTitle className="font-heading">{s.title}</CardTitle>
-                  {s.sessionDate && (
-                    <CardDescription>
-                      {new Date(s.sessionDate).toLocaleDateString("fr-FR", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </CardDescription>
-                  )}
-                </CardHeader>
-              </Card>
-            </Link>
+            <EntityCard
+              key={s.id}
+              href={`/seances/${s.slug}`}
+              title={s.title}
+              description={
+                s.sessionDate
+                  ? new Date(s.sessionDate).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })
+                  : null
+              }
+            />
           ))}
         </div>
       )}
