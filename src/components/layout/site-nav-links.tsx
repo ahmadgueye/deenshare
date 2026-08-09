@@ -11,11 +11,16 @@ const links = [
   { href: "/recherche", label: "Recherche", title: "Recherche (⌘K)" },
 ];
 
-export function SiteNavLinks() {
+export function SiteNavLinks({ className }: { className?: string }) {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
+    <nav
+      className={cn(
+        "hidden items-center gap-6 text-sm text-muted-foreground sm:flex",
+        className
+      )}
+    >
       {links.map((link) => (
         <Link
           key={link.href}
