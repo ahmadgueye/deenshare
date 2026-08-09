@@ -70,7 +70,7 @@ export default async function RecherchePage({ searchParams }: Props) {
     : [];
 
   return (
-    <div>
+    <div className="animate-in fade-in duration-300">
       <h1 className="font-heading text-3xl font-semibold tracking-tight">
         Recherche
       </h1>

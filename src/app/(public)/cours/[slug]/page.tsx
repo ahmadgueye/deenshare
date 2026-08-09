@@ -24,7 +24,7 @@ export default async function CoursDetailPage({ params }: Props) {
   if (!c) notFound();
 
   return (
-    <div>
+    <div className="animate-in fade-in duration-300">
       <nav className="text-sm text-muted-foreground">
         <Link href="/cours" className="hover:text-foreground">
           Cours

@@ -26,7 +26,7 @@ export default async function SeanceDetailPage({ params }: Props) {
   if (!s) notFound();
 
   return (
-    <div>
+    <div className="animate-in fade-in duration-300">
       <nav className="text-sm text-muted-foreground">
         <Link href="/seances" className="hover:text-foreground">
           Séances

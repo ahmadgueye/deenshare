@@ -16,7 +16,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-16 animate-in fade-in duration-300">
       <section className="max-w-2xl">
         <h1 className="font-heading text-4xl font-semibold leading-tight tracking-tight text-balance">
           Les ressources de nos cours, toujours à leur place.
