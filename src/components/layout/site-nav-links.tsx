@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
 import { cn, isNavActive } from "@/lib/utils";
 
 const links = [
@@ -12,13 +11,7 @@ const links = [
   { href: "/recherche", label: "Recherche", title: "Recherche (⌘K)" },
 ];
 
-export function SiteNavLinks({
-  authHref,
-  authLabel,
-}: {
-  authHref: string;
-  authLabel: string;
-}) {
+export function SiteNavLinks() {
   const pathname = usePathname();
 
   return (
@@ -36,9 +29,6 @@ export function SiteNavLinks({
           {link.label}
         </Link>
       ))}
-      <Button render={<Link href={authHref} />} nativeButton={false} size="sm">
-        {authLabel}
-      </Button>
     </nav>
   );
 }
