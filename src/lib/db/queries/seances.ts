@@ -9,6 +9,13 @@ export async function getAllSeances() {
   });
 }
 
+export async function getRecentSeances(limit: number) {
+  return db.query.seances.findMany({
+    orderBy: [desc(seances.createdAt)],
+    limit,
+  });
+}
+
 export async function getSeanceById(id: string) {
   const result = await db.query.seances.findFirst({
     where: eq(seances.id, id),
