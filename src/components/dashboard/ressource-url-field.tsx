@@ -10,6 +10,23 @@ import { createClient } from "@/lib/supabase/client";
 
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB — see storage bucket limit
 
+// Supabase Storage object keys reject accented/special characters (e.g. "º")
+// and are safest without spaces — sanitize while keeping the extension.
+function sanitizeFileName(name: string) {
+  const lastDot = name.lastIndexOf(".");
+  const base = lastDot > 0 ? name.slice(0, lastDot) : name;
+  const ext = lastDot > 0 ? name.slice(lastDot).toLowerCase() : "";
+
+  const safeBase = base
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-zA-Z0-9._-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return `${safeBase || "fichier"}${ext}`;
+}
+
 export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
   const fileInputId = useId();
   const [mode, setMode] = useState<"lien" | "fichier">("lien");
@@ -31,12 +48,13 @@ export function RessourceUrlField({ defaultUrl }: { defaultUrl?: string }) {
 
     setUploading(true);
     const supabase = createClient();
-    const path = `${crypto.randomUUID()}-${file.name}`;
+    const path = `${crypto.randomUUID()}-${sanitizeFileName(file.name)}`;
     const { error: uploadError } = await supabase.storage
       .from("ressources")
       .upload(path, file);
 
     if (uploadError) {
+      console.error("Supabase storage upload error:", uploadError);
       setError("Échec de l'envoi du fichier. Réessaie.");
       setUploading(false);
       return;
