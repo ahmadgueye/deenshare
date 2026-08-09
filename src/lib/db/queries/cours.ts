@@ -9,6 +9,14 @@ export async function getAllCours() {
   });
 }
 
+export async function getCoursById(id: string) {
+  const result = await db.query.cours.findFirst({
+    where: eq(cours.id, id),
+  });
+
+  return result ?? null;
+}
+
 export async function getCoursBySlug(slug: string) {
   const result = await db.query.cours.findFirst({
     where: eq(cours.slug, slug),

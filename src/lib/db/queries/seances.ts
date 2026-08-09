@@ -9,6 +9,18 @@ export async function getAllSeances() {
   });
 }
 
+export async function getSeanceById(id: string) {
+  const result = await db.query.seances.findFirst({
+    where: eq(seances.id, id),
+    with: {
+      seanceThematiques: true,
+      seanceRessources: true,
+    },
+  });
+
+  return result ?? null;
+}
+
 export async function getSeanceBySlug(slug: string) {
   const result = await db.query.seances.findFirst({
     where: eq(seances.slug, slug),
