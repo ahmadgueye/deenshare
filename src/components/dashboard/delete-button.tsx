@@ -1,10 +1,10 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Loader2, Trash2 } from "lucide-react";
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -22,8 +22,18 @@ export function DeleteButton({
   action: () => Promise<void>;
   itemLabel: string;
 }) {
+  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  function handleDelete() {
+    startTransition(async () => {
+      await action();
+      setOpen(false);
+    });
+  }
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger render={<Button variant="ghost" size="icon-sm" />}>
         <Trash2 className="size-4" />
       </AlertDialogTrigger>
@@ -35,12 +45,21 @@ export function DeleteButton({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Annuler</AlertDialogCancel>
-          <form action={action}>
-            <AlertDialogAction type="submit" variant="destructive">
-              Supprimer
-            </AlertDialogAction>
-          </form>
+          <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
+          <Button
+            variant="destructive"
+            disabled={isPending}
+            onClick={handleDelete}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                Suppression…
+              </>
+            ) : (
+              "Supprimer"
+            )}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
