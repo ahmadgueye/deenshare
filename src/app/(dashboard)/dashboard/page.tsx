@@ -1,6 +1,12 @@
 import { count, eq } from "drizzle-orm";
 import Link from "next/link";
-import { BookOpen, Calendar, Link as LinkIcon, ListTree } from "lucide-react";
+import {
+  BookMarked,
+  BookOpen,
+  Calendar,
+  Link as LinkIcon,
+  ListTree,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +18,15 @@ import {
 } from "@/components/ui/card";
 import { getCurrentProfile } from "@/lib/auth/get-session";
 import { db } from "@/lib/db";
-import { cours, profiles, ressources, seances, thematiques } from "@/lib/db/schema";
+import {
+  cours,
+  hadiths,
+  profiles,
+  ressources,
+  seances,
+  thematiques,
+} from "@/lib/db/schema";
+import { getRecentHadiths } from "@/lib/db/queries/hadiths";
 import { getRecentRessources } from "@/lib/db/queries/ressources";
 import { getRecentSeances } from "@/lib/db/queries/seances";
 
@@ -31,6 +45,7 @@ const quickActions = [
     icon: LinkIcon,
   },
   { href: "/dashboard/seances/new", label: "Nouvelle séance", icon: Calendar },
+  { href: "/dashboard/hadiths/new", label: "Nouveau hadith", icon: BookMarked },
 ];
 
 export default async function DashboardHomePage() {
@@ -41,16 +56,20 @@ export default async function DashboardHomePage() {
     [thematiquesCount],
     [ressourcesCount],
     [seancesCount],
+    [hadithsCount],
     recentRessources,
     recentSeances,
+    recentHadiths,
     pendingViewers,
   ] = await Promise.all([
     db.select({ value: count() }).from(cours),
     db.select({ value: count() }).from(thematiques),
     db.select({ value: count() }).from(ressources),
     db.select({ value: count() }).from(seances),
+    db.select({ value: count() }).from(hadiths),
     getRecentRessources(5),
     getRecentSeances(5),
+    getRecentHadiths(5),
     profile?.role === "admin"
       ? db
           .select({ value: count() })
@@ -72,6 +91,7 @@ export default async function DashboardHomePage() {
       href: "/dashboard/ressources",
     },
     { label: "Séances", value: seancesCount.value, href: "/dashboard/seances" },
+    { label: "Hadiths", value: hadithsCount.value, href: "/dashboard/hadiths" },
   ];
 
   const pendingCount = pendingViewers[0]?.value ?? 0;
@@ -116,7 +136,7 @@ export default async function DashboardHomePage() {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {stats.map((s) => (
           <Link key={s.label} href={s.href}>
             <Card className="h-full transition-colors hover:bg-muted">
@@ -184,6 +204,32 @@ export default async function DashboardHomePage() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="font-heading text-lg font-semibold">
+          Hadiths récents
+        </h2>
+        {recentHadiths.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Aucun hadith pour le moment.
+          </p>
+        ) : (
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {recentHadiths.map((h) => (
+              <Link
+                key={h.id}
+                href={`/hadiths/${h.slug}`}
+                className="flex items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
+              >
+                <span className="truncate">{h.title}</span>
+                <span className="shrink-0 truncate text-muted-foreground">
+                  {h.narrator}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
