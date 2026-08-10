@@ -80,6 +80,7 @@ export async function createSeance(
 
   revalidatePath("/dashboard/seances");
   revalidatePath("/seances");
+  revalidatePath("/");
   redirect("/dashboard/seances");
 }
 
@@ -135,6 +136,7 @@ export async function updateSeance(
 
   revalidatePath("/dashboard/seances");
   revalidatePath("/seances");
+  revalidatePath("/");
   redirect("/dashboard/seances");
 }
 
@@ -143,4 +145,5 @@ export async function deleteSeance(id: string) {
   await db.delete(seances).where(eq(seances.id, id));
   revalidatePath("/dashboard/seances");
   revalidatePath("/seances");
+  revalidatePath("/");
 }

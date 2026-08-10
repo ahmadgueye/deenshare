@@ -43,6 +43,7 @@ export async function createCours(
 
   revalidatePath("/dashboard/cours");
   revalidatePath("/cours");
+  revalidatePath("/");
   redirect("/dashboard/cours");
 }
 
@@ -76,6 +77,7 @@ export async function updateCours(
 
   revalidatePath("/dashboard/cours");
   revalidatePath("/cours");
+  revalidatePath("/");
   redirect("/dashboard/cours");
 }
 
@@ -84,4 +86,5 @@ export async function deleteCours(id: string) {
   await db.delete(cours).where(eq(cours.id, id));
   revalidatePath("/dashboard/cours");
   revalidatePath("/cours");
+  revalidatePath("/");
 }
