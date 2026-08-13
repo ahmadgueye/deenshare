@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 
+import { MarkdownEditorField } from "@/components/dashboard/markdown-editor-field";
 import { SubmitButton } from "@/components/dashboard/submit-button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,7 +14,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   createSeance,
   updateSeance,
@@ -85,19 +85,13 @@ export function SeanceForm({
           />
           <FieldDescription>Facultatif.</FieldDescription>
         </Field>
-        <Field>
-          <FieldLabel htmlFor="summary">Résumé de la séance</FieldLabel>
-          <Textarea
-            id="summary"
-            name="summary"
-            defaultValue={seance?.summary ?? ""}
-            rows={4}
-          />
-          <FieldDescription>
-            Facultatif. Markdown supporté : **gras**, listes (- item), liens
-            [texte](url).
-          </FieldDescription>
-        </Field>
+        <MarkdownEditorField
+          name="summary"
+          label="Résumé de la séance"
+          defaultValue={seance?.summary}
+          placeholder="Résumé en **Markdown**…"
+          fieldDescription="Facultatif. Markdown supporté : **gras**, listes (- item), liens [texte](url)."
+        />
 
         <Field>
           <FieldLabel>Thématiques abordées</FieldLabel>
