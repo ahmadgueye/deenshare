@@ -103,6 +103,7 @@ export async function searchCatalogue(
                 ? or(
                     ilike(hadiths.title, pattern),
                     ilike(hadiths.translationFr, pattern),
+                    ilike(hadiths.translationWolof, pattern),
                     ilike(hadiths.narrator, pattern)
                   )
                 : undefined

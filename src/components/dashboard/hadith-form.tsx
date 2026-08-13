@@ -35,6 +35,7 @@ export function HadithForm({
     title: string;
     arabicText: string;
     translationFr: string;
+    translationWolof: string | null;
     narrator: string;
     source: string | null;
     thematiqueId: string;
@@ -98,6 +99,13 @@ export function HadithForm({
           label="Traduction en français"
           defaultValue={hadith?.translationFr}
           placeholder="Texte en **Markdown**…"
+        />
+        <MarkdownEditorField
+          name="translationWolof"
+          label="Texte wolof"
+          defaultValue={hadith?.translationWolof}
+          placeholder="Texte en **Markdown**…"
+          fieldDescription="Facultatif. Markdown supporté : gras, listes, liens, etc."
         />
         <Field>
           <FieldLabel htmlFor="narrator">Rapporteur(s)</FieldLabel>

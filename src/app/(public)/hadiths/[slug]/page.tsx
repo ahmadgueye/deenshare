@@ -12,9 +12,7 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const h = await getHadithBySlug(slug);
   const title = h?.title ?? "Hadith";
@@ -53,28 +51,53 @@ export default async function HadithDetailPage({ params }: Props) {
         {h.title}
       </h1>
 
-      <Link href={`/thematiques/${h.thematique.slug}`} className="mt-3 inline-block">
+      <Link
+        href={`/thematiques/${h.thematique.slug}`}
+        className="mt-3 inline-block"
+      >
         <Badge variant="outline" className="hover:bg-muted">
           {h.thematique.cours.title} · {h.thematique.title}
         </Badge>
       </Link>
 
-      <MarkdownContent
-        content={h.arabicText}
-        dir="rtl"
-        lang="ar"
-        className="mt-6 max-w-none font-arabic text-2xl leading-loose text-right"
-      />
-
-      <MarkdownContent
-        content={h.translationFr}
-        className="mt-6 max-w-none text-muted-foreground"
-      />
-
       <div className="mt-6 text-sm text-muted-foreground">
         <p>Rapporteur(s) : {h.narrator}</p>
         {h.source && <p className="mt-1">Source : {h.source}</p>}
       </div>
+
+      <p className="mt-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+        Arabe
+      </p>
+      <MarkdownContent
+        content={h.arabicText}
+        dir="rtl"
+        lang="ar"
+        className="mt-2 max-w-none font-arabic text-2xl leading-loose text-right"
+      />
+
+      <p className="mt-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+        Français
+      </p>
+      <MarkdownContent
+        content={h.translationFr}
+        className="mt-2 max-w-none text-muted-foreground"
+      />
+
+      {h.translationWolof && (
+        <>
+          <p className="mt-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Wolof
+          </p>
+          <MarkdownContent
+            content={h.translationWolof}
+            className="mt-2 max-w-none text-muted-foreground"
+          />
+        </>
+      )}
+      {/* <div className="mt-6 text-sm text-muted-foreground">
+        <p>Rapporteur(s) : {h.narrator}</p>
+        {h.source && <p className="mt-1">Source : {h.source}</p>}
+      </div> */}
     </div>
   );
 }

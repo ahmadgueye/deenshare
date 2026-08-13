@@ -1,0 +1,1 @@
+ALTER TABLE "hadiths" ADD COLUMN "translation_wolof" text;

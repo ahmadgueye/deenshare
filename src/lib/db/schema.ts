@@ -94,6 +94,7 @@ export const hadiths = pgTable("hadiths", {
   title: text("title").notNull(),
   arabicText: text("arabic_text").notNull(),
   translationFr: text("translation_fr").notNull(),
+  translationWolof: text("translation_wolof"),
   narrator: text("narrator").notNull(),
   source: text("source"),
   addedBy: uuid("added_by").references(() => profiles.id),
