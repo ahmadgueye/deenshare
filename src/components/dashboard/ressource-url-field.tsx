@@ -1,8 +1,20 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, PenLine, Upload } from "lucide-react";
 
+import { MarkdownContent } from "@/components/public/markdown-content";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,14 +24,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/client";
 
-type RessourceType = "video" | "pdf" | "lien";
+type RessourceType = "video" | "pdf" | "lien" | "texte";
 
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB — see storage bucket limit
 
 export const typeLabels: Record<RessourceType, string> = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
+  texte: "Texte",
+};
+
+// "Texte" isn't selectable from the link/URL type picker — it's its own tab.
+const urlTypeLabels: Record<Exclude<RessourceType, "texte">, string> = {
   video: "Vidéo",
   pdf: "PDF",
   lien: "Lien",
@@ -53,14 +74,20 @@ function sanitizeFileName(name: string) {
 export function RessourceUrlField({
   defaultUrl,
   defaultType,
+  defaultContent,
 }: {
   defaultUrl?: string;
   defaultType?: RessourceType;
+  defaultContent?: string | null;
 }) {
   const fileInputId = useId();
-  const [mode, setMode] = useState<"lien" | "fichier">("lien");
+  const [mode, setMode] = useState<"lien" | "fichier" | "texte">(
+    defaultType === "texte" ? "texte" : "lien",
+  );
   const [url, setUrl] = useState(defaultUrl ?? "");
   const [type, setType] = useState<RessourceType>(defaultType ?? "lien");
+  const [content, setContent] = useState(defaultContent ?? "");
+  const [editorOpen, setEditorOpen] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -100,10 +127,22 @@ export function RessourceUrlField({
   return (
     <div className="flex w-full flex-col gap-2">
       <FieldLabel>Ressource</FieldLabel>
-      <Tabs value={mode} onValueChange={(v) => setMode(v as "lien" | "fichier")}>
+      <Tabs
+        value={mode}
+        onValueChange={(v) => {
+          const nextMode = v as "lien" | "fichier" | "texte";
+          setMode(nextMode);
+          if (nextMode === "texte") {
+            setType("texte");
+          } else if (type === "texte") {
+            setType("lien");
+          }
+        }}
+      >
         <TabsList>
           <TabsTrigger value="lien">Lien externe</TabsTrigger>
           <TabsTrigger value="fichier">Fichier</TabsTrigger>
+          <TabsTrigger value="texte">Texte</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -119,13 +158,13 @@ export function RessourceUrlField({
           <Select
             value={type}
             onValueChange={(v) => v && setType(v as RessourceType)}
-            items={typeLabels}
+            items={urlTypeLabels}
           >
             <SelectTrigger id="type" className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(typeLabels).map(([value, label]) => (
+              {Object.entries(urlTypeLabels).map(([value, label]) => (
                 <SelectItem key={value} value={value}>
                   {label}
                 </SelectItem>
@@ -133,7 +172,7 @@ export function RessourceUrlField({
             </SelectContent>
           </Select>
         </>
-      ) : (
+      ) : mode === "fichier" ? (
         <div>
           <label
             htmlFor={fileInputId}
@@ -159,16 +198,101 @@ export function RessourceUrlField({
             </p>
           )}
         </div>
+      ) : (
+        <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
+          <DialogTrigger
+            render={
+              <button
+                type="button"
+                className="flex w-full flex-col gap-2 border border-dashed p-3 text-left text-sm text-muted-foreground hover:bg-muted"
+              />
+            }
+          >
+            {content ? (
+              <>
+                <span className="line-clamp-3 font-mono text-xs text-foreground">
+                  {content}
+                </span>
+                <span className="flex items-center gap-2 text-xs">
+                  <PenLine className="size-3.5" />
+                  Modifier
+                </span>
+              </>
+            ) : (
+              <span className="flex items-center gap-2">
+                <PenLine className="size-4" />
+                Rédiger le contenu…
+              </span>
+            )}
+          </DialogTrigger>
+
+          <DialogContent className="flex h-[85vh] w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-7xl">
+            <DialogHeader className="border-b p-4">
+              <DialogTitle>Contenu — Markdown</DialogTitle>
+              <DialogDescription>
+                Gras, listes, liens, titres… supportés.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="hidden min-h-0 flex-1 sm:grid sm:grid-cols-2">
+              <Textarea
+                autoFocus
+                placeholder="# Titre&#10;&#10;Contenu en **Markdown**…"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="h-full resize-none rounded-none border-0 border-r font-mono text-sm focus-visible:ring-0"
+              />
+              <div className="h-full overflow-y-auto p-4">
+                <MarkdownContent content={content || "*Aperçu…*"} />
+              </div>
+            </div>
+
+            <Tabs
+              defaultValue="write"
+              className="flex min-h-0 flex-1 sm:hidden"
+            >
+              <TabsList className="mx-4 mt-2">
+                <TabsTrigger value="write">Écrire</TabsTrigger>
+                <TabsTrigger value="preview">Aperçu</TabsTrigger>
+              </TabsList>
+              <TabsContent value="write" className="min-h-0 p-4 pt-2">
+                <Textarea
+                  autoFocus
+                  placeholder="# Titre&#10;&#10;Contenu en **Markdown**…"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="h-full resize-none font-mono text-sm"
+                />
+              </TabsContent>
+              <TabsContent
+                value="preview"
+                className="min-h-0 overflow-y-auto p-4 pt-2"
+              >
+                <MarkdownContent content={content || "*Aperçu…*"} />
+              </TabsContent>
+            </Tabs>
+
+            <DialogFooter className="mx-0 mb-0 border-t p-4">
+              <DialogClose render={<Button>Terminer</Button>} />
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
 
       {error && <p className="text-sm text-destructive">{error}</p>}
       <FieldDescription>
-        Vidéos volumineuses : préfère un lien Drive ou YouTube plutôt qu'un
-        envoi direct.
+        {mode === "texte"
+          ? "Markdown supporté : gras, listes, liens, etc."
+          : "Vidéos volumineuses : préfère un lien Drive ou YouTube plutôt qu'un envoi direct."}
       </FieldDescription>
 
-      <input type="hidden" name="url" value={url} />
+      <input type="hidden" name="url" value={mode === "texte" ? "" : url} />
       <input type="hidden" name="type" value={type} />
+      <input
+        type="hidden"
+        name="content"
+        value={mode === "texte" ? content : ""}
+      />
     </div>
   );
 }

@@ -26,7 +26,12 @@ import {
 } from "@/components/ui/table";
 import { deleteRessource } from "@/lib/actions/ressources";
 
-const typeLabels = { video: "Vidéo", pdf: "PDF", lien: "Lien" } as const;
+const typeLabels = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
+  texte: "Texte",
+} as const;
 type RessourceType = keyof typeof typeLabels;
 
 const filterItems = { all: "Tous les types", ...typeLabels };

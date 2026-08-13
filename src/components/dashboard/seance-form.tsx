@@ -21,7 +21,12 @@ import {
 } from "@/lib/actions/seances";
 import { cn } from "@/lib/utils";
 
-const typeLabels = { video: "Vidéo", pdf: "PDF", lien: "Lien" };
+const typeLabels = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
+  texte: "Texte",
+};
 
 export function SeanceForm({
   thematiqueOptions,
@@ -34,7 +39,7 @@ export function SeanceForm({
   ressourceOptions: {
     id: string;
     title: string;
-    type: "video" | "pdf" | "lien";
+    type: "video" | "pdf" | "lien" | "texte";
     coursTitle: string;
     thematiqueTitle: string;
   }[];

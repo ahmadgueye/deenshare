@@ -65,21 +65,19 @@ export async function searchCatalogue(
           })
         : Promise.resolve([]),
       types.includes("ressource")
-        ? db
-            .select()
-            .from(ressources)
-            .where(
-              and(
-                textCondition
-                  ? or(
-                      ilike(ressources.title, pattern),
-                      ilike(ressources.description, pattern)
-                    )
-                  : undefined,
-                inArray(ressources.type, ressourceTypes)
-              )
-            )
-            .limit(20)
+        ? db.query.ressources.findMany({
+            where: and(
+              textCondition
+                ? or(
+                    ilike(ressources.title, pattern),
+                    ilike(ressources.description, pattern)
+                  )
+                : undefined,
+              inArray(ressources.type, ressourceTypes)
+            ),
+            with: { thematique: true },
+            limit: 20,
+          })
         : Promise.resolve([]),
       types.includes("seance")
         ? db
@@ -129,7 +127,7 @@ export async function searchCatalogue(
       type: "ressource" as const,
       title: r.title,
       subtitle: r.type,
-      href: r.url,
+      href: r.url ?? `/thematiques/${r.thematique.slug}`,
     })),
     ...seanceResults.map((s) => ({
       type: "seance" as const,

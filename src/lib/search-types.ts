@@ -6,7 +6,7 @@ export type SearchResult = {
 };
 
 export type EntityType = SearchResult["type"];
-export type RessourceType = "video" | "pdf" | "lien";
+export type RessourceType = "video" | "pdf" | "lien" | "texte";
 
 export const ALL_ENTITY_TYPES: EntityType[] = [
   "cours",
@@ -15,4 +15,9 @@ export const ALL_ENTITY_TYPES: EntityType[] = [
   "seance",
   "hadith",
 ];
-export const ALL_RESSOURCE_TYPES: RessourceType[] = ["video", "pdf", "lien"];
+export const ALL_RESSOURCE_TYPES: RessourceType[] = [
+  "video",
+  "pdf",
+  "lien",
+  "texte",
+];

@@ -64,6 +64,7 @@ export default async function ThematiqueDetailPage({ params }: Props) {
               title={r.title}
               type={r.type}
               url={r.url}
+              content={r.content}
               description={r.description}
             />
           ))}

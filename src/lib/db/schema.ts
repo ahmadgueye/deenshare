@@ -15,6 +15,7 @@ export const ressourceTypeEnum = pgEnum("ressource_type", [
   "video",
   "pdf",
   "lien",
+  "texte",
 ]);
 
 // Mirrors auth.users (Supabase-managed). One row per authenticated user.
@@ -67,7 +68,8 @@ export const ressources = pgTable("ressources", {
     .references(() => thematiques.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   type: ressourceTypeEnum("type").notNull(),
-  url: text("url").notNull(),
+  url: text("url"),
+  content: text("content"),
   description: text("description"),
   addedBy: uuid("added_by").references(() => profiles.id),
   createdAt: timestamp("created_at", { withTimezone: true })

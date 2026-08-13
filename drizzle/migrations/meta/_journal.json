@@ -50,6 +50,13 @@
       "when": 1786320200000,
       "tag": "0006_hadiths_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1786404100100,
+      "tag": "0007_striped_grey_gargoyle",
+      "breakpoints": true
     }
   ]
 }

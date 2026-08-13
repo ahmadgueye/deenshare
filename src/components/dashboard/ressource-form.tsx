@@ -34,8 +34,9 @@ export function RessourceForm({
   ressource?: {
     id: string;
     title: string;
-    type: "video" | "pdf" | "lien";
-    url: string;
+    type: "video" | "pdf" | "lien" | "texte";
+    url: string | null;
+    content?: string | null;
     description: string | null;
     thematiqueId: string;
   };
@@ -85,8 +86,9 @@ export function RessourceForm({
         </Field>
         <Field>
           <RessourceUrlField
-            defaultUrl={ressource?.url}
+            defaultUrl={ressource?.url ?? undefined}
             defaultType={ressource?.type}
+            defaultContent={ressource?.content}
           />
         </Field>
         <Field>

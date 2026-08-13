@@ -90,6 +90,7 @@ export default async function SeanceDetailPage({ params }: Props) {
                 title={ressource.title}
                 type={ressource.type}
                 url={ressource.url}
+                content={ressource.content}
                 description={ressource.description}
               />
             ))}

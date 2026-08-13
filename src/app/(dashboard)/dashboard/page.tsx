@@ -30,7 +30,12 @@ import { getRecentHadiths } from "@/lib/db/queries/hadiths";
 import { getRecentRessources } from "@/lib/db/queries/ressources";
 import { getRecentSeances } from "@/lib/db/queries/seances";
 
-const typeLabels = { video: "Vidéo", pdf: "PDF", lien: "Lien" };
+const typeLabels = {
+  video: "Vidéo",
+  pdf: "PDF",
+  lien: "Lien",
+  texte: "Texte",
+};
 
 const quickActions = [
   { href: "/dashboard/cours/new", label: "Nouveau cours", icon: BookOpen },
