@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { BackButton } from "@/components/public/back-button";
+import { MarkdownContent } from "@/components/public/markdown-content";
 import { getHadithBySlug } from "@/lib/db/queries/hadiths";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
@@ -58,15 +59,17 @@ export default async function HadithDetailPage({ params }: Props) {
         </Badge>
       </Link>
 
-      <p
+      <MarkdownContent
+        content={h.arabicText}
         dir="rtl"
         lang="ar"
-        className="mt-6 font-arabic text-2xl leading-loose text-right"
-      >
-        {h.arabicText}
-      </p>
+        className="mt-6 max-w-none font-arabic text-2xl leading-loose text-right"
+      />
 
-      <p className="mt-6 text-muted-foreground">{h.translationFr}</p>
+      <MarkdownContent
+        content={h.translationFr}
+        className="mt-6 max-w-none text-muted-foreground"
+      />
 
       <div className="mt-6 text-sm text-muted-foreground">
         <p>Rapporteur(s) : {h.narrator}</p>

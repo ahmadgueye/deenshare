@@ -1,20 +1,9 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Loader2, PenLine, Upload } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 
-import { MarkdownContent } from "@/components/public/markdown-content";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { MarkdownEditorField } from "@/components/dashboard/markdown-editor-field";
 import { FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,8 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/lib/supabase/client";
 
 type RessourceType = "video" | "pdf" | "lien" | "texte";
@@ -86,8 +74,6 @@ export function RessourceUrlField({
   );
   const [url, setUrl] = useState(defaultUrl ?? "");
   const [type, setType] = useState<RessourceType>(defaultType ?? "lien");
-  const [content, setContent] = useState(defaultContent ?? "");
-  const [editorOpen, setEditorOpen] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -198,101 +184,32 @@ export function RessourceUrlField({
             </p>
           )}
         </div>
-      ) : (
-        <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-          <DialogTrigger
-            render={
-              <button
-                type="button"
-                className="flex w-full flex-col gap-2 border border-dashed p-3 text-left text-sm text-muted-foreground hover:bg-muted"
-              />
-            }
-          >
-            {content ? (
-              <>
-                <span className="line-clamp-3 font-mono text-xs text-foreground">
-                  {content}
-                </span>
-                <span className="flex items-center gap-2 text-xs">
-                  <PenLine className="size-3.5" />
-                  Modifier
-                </span>
-              </>
-            ) : (
-              <span className="flex items-center gap-2">
-                <PenLine className="size-4" />
-                Rédiger le contenu…
-              </span>
-            )}
-          </DialogTrigger>
+      ) : null}
 
-          <DialogContent className="flex h-[85vh] w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-7xl">
-            <DialogHeader className="border-b p-4">
-              <DialogTitle>Contenu — Markdown</DialogTitle>
-              <DialogDescription>
-                Gras, listes, liens, titres… supportés.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="hidden min-h-0 flex-1 sm:grid sm:grid-cols-2">
-              <Textarea
-                autoFocus
-                placeholder="# Titre&#10;&#10;Contenu en **Markdown**…"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="h-full resize-none rounded-none border-0 border-r font-mono text-sm focus-visible:ring-0"
-              />
-              <div className="h-full overflow-y-auto p-4">
-                <MarkdownContent content={content || "*Aperçu…*"} />
-              </div>
-            </div>
-
-            <Tabs
-              defaultValue="write"
-              className="flex min-h-0 flex-1 sm:hidden"
-            >
-              <TabsList className="mx-4 mt-2">
-                <TabsTrigger value="write">Écrire</TabsTrigger>
-                <TabsTrigger value="preview">Aperçu</TabsTrigger>
-              </TabsList>
-              <TabsContent value="write" className="min-h-0 p-4 pt-2">
-                <Textarea
-                  autoFocus
-                  placeholder="# Titre&#10;&#10;Contenu en **Markdown**…"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="h-full resize-none font-mono text-sm"
-                />
-              </TabsContent>
-              <TabsContent
-                value="preview"
-                className="min-h-0 overflow-y-auto p-4 pt-2"
-              >
-                <MarkdownContent content={content || "*Aperçu…*"} />
-              </TabsContent>
-            </Tabs>
-
-            <DialogFooter className="mx-0 mb-0 border-t p-4">
-              <DialogClose render={<Button>Terminer</Button>} />
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+      {/* Always mounted (just hidden) so switching tabs away and back doesn't
+          lose in-progress Markdown content. */}
+      <div className={mode === "texte" ? undefined : "hidden"}>
+        <MarkdownEditorField
+          name="content"
+          defaultValue={defaultContent}
+          fieldDescription={null}
+        />
+      </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
-      <FieldDescription>
-        {mode === "texte"
-          ? "Markdown supporté : gras, listes, liens, etc."
-          : "Vidéos volumineuses : préfère un lien Drive ou YouTube plutôt qu'un envoi direct."}
-      </FieldDescription>
+      {mode !== "texte" && (
+        <FieldDescription>
+          Vidéos volumineuses : préfère un lien Drive ou YouTube plutôt qu&apos;un envoi direct.
+        </FieldDescription>
+      )}
+      {mode === "texte" && (
+        <FieldDescription>
+          Markdown supporté : gras, listes, liens, etc.
+        </FieldDescription>
+      )}
 
       <input type="hidden" name="url" value={mode === "texte" ? "" : url} />
       <input type="hidden" name="type" value={type} />
-      <input
-        type="hidden"
-        name="content"
-        value={mode === "texte" ? content : ""}
-      />
     </div>
   );
 }

@@ -48,12 +48,18 @@ const components: Components = {
 export function MarkdownContent({
   content,
   className,
+  dir,
+  lang,
 }: {
   content: string;
   className?: string;
+  dir?: "rtl" | "ltr";
+  lang?: string;
 }) {
   return (
     <div
+      dir={dir}
+      lang={lang}
       className={cn(
         "max-w-2xl text-sm leading-relaxed text-foreground",
         className

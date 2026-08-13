@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { MarkdownEditorField } from "@/components/dashboard/markdown-editor-field";
 import { SubmitButton } from "@/components/dashboard/submit-button";
 import {
   Field,
@@ -18,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import {
   createHadith,
   updateHadith,
@@ -84,31 +84,21 @@ export function HadithForm({
             Court résumé en français, utilisé aussi pour l&apos;URL.
           </FieldDescription>
         </Field>
-        <Field>
-          <FieldLabel htmlFor="arabicText">Texte arabe</FieldLabel>
-          <Textarea
-            id="arabicText"
-            name="arabicText"
-            dir="rtl"
-            lang="ar"
-            className="font-arabic text-right"
-            defaultValue={hadith?.arabicText}
-            rows={4}
-            required
-          />
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="translationFr">
-            Traduction en français
-          </FieldLabel>
-          <Textarea
-            id="translationFr"
-            name="translationFr"
-            defaultValue={hadith?.translationFr}
-            rows={4}
-            required
-          />
-        </Field>
+        <MarkdownEditorField
+          name="arabicText"
+          label="Texte arabe"
+          defaultValue={hadith?.arabicText}
+          dir="rtl"
+          lang="ar"
+          editorClassName="font-arabic text-right"
+          placeholder="النص بالعربية…"
+        />
+        <MarkdownEditorField
+          name="translationFr"
+          label="Traduction en français"
+          defaultValue={hadith?.translationFr}
+          placeholder="Texte en **Markdown**…"
+        />
         <Field>
           <FieldLabel htmlFor="narrator">Rapporteur(s)</FieldLabel>
           <Input
