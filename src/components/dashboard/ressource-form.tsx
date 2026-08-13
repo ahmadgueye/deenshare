@@ -26,6 +26,11 @@ import {
   type ActionState,
 } from "@/lib/actions/ressources";
 
+const statusOptions = [
+  { value: "published", label: "Publié" },
+  { value: "draft", label: "Brouillon" },
+];
+
 export function RessourceForm({
   thematiqueOptions,
   ressource,
@@ -39,6 +44,7 @@ export function RessourceForm({
     content?: string | null;
     description: string | null;
     thematiqueId: string;
+    status: "draft" | "published";
   };
 }) {
   const action = ressource
@@ -90,6 +96,26 @@ export function RessourceForm({
             defaultType={ressource?.type}
             defaultContent={ressource?.content}
           />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="status">Statut</FieldLabel>
+          <Select
+            name="status"
+            defaultValue={ressource?.status ?? "published"}
+            items={statusOptions}
+            required
+          >
+            <SelectTrigger id="status" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field>
           <FieldLabel htmlFor="description">Description</FieldLabel>

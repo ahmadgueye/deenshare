@@ -15,6 +15,7 @@ const baseFields = {
   title: z.string().trim().min(1, "Le titre est requis."),
   description: z.string().trim().optional(),
   thematiqueId: z.string().trim().min(1, "La thématique est requise."),
+  status: z.enum(["draft", "published"]),
 };
 
 const ressourceSchema = z.discriminatedUnion("type", [
@@ -42,6 +43,7 @@ export async function createRessource(
     content: formData.get("content"),
     description: formData.get("description"),
     thematiqueId: formData.get("thematiqueId"),
+    status: formData.get("status"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
@@ -54,6 +56,7 @@ export async function createRessource(
     content: parsed.data.type === "texte" ? parsed.data.content : null,
     description: parsed.data.description || null,
     thematiqueId: parsed.data.thematiqueId,
+    status: parsed.data.status,
     addedBy: profile.id,
   });
 
@@ -75,6 +78,7 @@ export async function updateRessource(
     content: formData.get("content"),
     description: formData.get("description"),
     thematiqueId: formData.get("thematiqueId"),
+    status: formData.get("status"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
@@ -89,6 +93,7 @@ export async function updateRessource(
       content: parsed.data.type === "texte" ? parsed.data.content : null,
       description: parsed.data.description || null,
       thematiqueId: parsed.data.thematiqueId,
+      status: parsed.data.status,
       updatedAt: new Date(),
     })
     .where(eq(ressources.id, id));

@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteRessource } from "@/lib/actions/ressources";
+import { ressourceStatusConfig } from "@/lib/ressource-status";
 
 const typeLabels = {
   video: "Vidéo",
@@ -36,10 +37,19 @@ type RessourceType = keyof typeof typeLabels;
 
 const filterItems = { all: "Tous les types", ...typeLabels };
 
+const statusLabels = {
+  draft: "Brouillon",
+  published: "Publié",
+} as const;
+type RessourceStatus = keyof typeof statusLabels;
+
+const statusFilterItems = { all: "Tous les statuts", ...statusLabels };
+
 type RessourceRow = {
   id: string;
   title: string;
   type: RessourceType;
+  status: RessourceStatus;
   createdAt: Date;
   thematique: { id: string; title: string; cours: { title: string } };
 };
@@ -49,6 +59,7 @@ type SortKey = "title" | "type" | "thematique" | "createdAt";
 export function RessourcesTable({ data }: { data: RessourceRow[] }) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [thematiqueFilter, setThematiqueFilter] = useState("all");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -82,12 +93,13 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
     const q = search.trim().toLowerCase();
     return data.filter((r) => {
       const matchesType = typeFilter === "all" || r.type === typeFilter;
+      const matchesStatus = statusFilter === "all" || r.status === statusFilter;
       const matchesThematique =
         thematiqueFilter === "all" || r.thematique.id === thematiqueFilter;
       const matchesSearch = !q || r.title.toLowerCase().includes(q);
-      return matchesType && matchesThematique && matchesSearch;
+      return matchesType && matchesStatus && matchesThematique && matchesSearch;
     });
-  }, [data, search, typeFilter, thematiqueFilter]);
+  }, [data, search, typeFilter, statusFilter, thematiqueFilter]);
 
   const sorted = useMemo(() => {
     if (!sortKey) return filtered;
@@ -125,6 +137,23 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
           <SelectContent>
             <SelectItem value="all">Tous les types</SelectItem>
             {Object.entries(typeLabels).map(([value, label]) => (
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={statusFilter}
+          onValueChange={(v) => v && setStatusFilter(v)}
+          items={statusFilterItems}
+        >
+          <SelectTrigger className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous les statuts</SelectItem>
+            {Object.entries(statusLabels).map(([value, label]) => (
               <SelectItem key={value} value={value}>
                 {label}
               </SelectItem>
@@ -170,6 +199,7 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
                 direction={sortDir}
                 onSort={handleSort}
               />
+              <TableHead>Statut</TableHead>
               <SortableTableHead
                 label="Thématique"
                 sortKey="thematique"
@@ -193,6 +223,11 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
                 <TableCell className="font-medium">{r.title}</TableCell>
                 <TableCell>
                   <Badge variant="secondary">{typeLabels[r.type]}</Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={ressourceStatusConfig[r.status].badgeVariant}>
+                    {ressourceStatusConfig[r.status].label}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {r.thematique.cours.title} · {r.thematique.title}

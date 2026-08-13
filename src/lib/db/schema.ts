@@ -17,6 +17,10 @@ export const ressourceTypeEnum = pgEnum("ressource_type", [
   "lien",
   "texte",
 ]);
+export const ressourceStatusEnum = pgEnum("ressource_status", [
+  "draft",
+  "published",
+]);
 
 // Mirrors auth.users (Supabase-managed). One row per authenticated user.
 export const profiles = pgTable("profiles", {
@@ -71,6 +75,7 @@ export const ressources = pgTable("ressources", {
   url: text("url"),
   content: text("content"),
   description: text("description"),
+  status: ressourceStatusEnum("status").notNull().default("published"),
   addedBy: uuid("added_by").references(() => profiles.id),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

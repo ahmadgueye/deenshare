@@ -1,4 +1,4 @@
-import { and, ilike, inArray, or } from "drizzle-orm";
+import { and, eq, ilike, inArray, or } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { cours, hadiths, ressources, seances, thematiques } from "@/lib/db/schema";
@@ -73,7 +73,8 @@ export async function searchCatalogue(
                     ilike(ressources.description, pattern)
                   )
                 : undefined,
-              inArray(ressources.type, ressourceTypes)
+              inArray(ressources.type, ressourceTypes),
+              eq(ressources.status, "published")
             ),
             with: { thematique: true },
             limit: 20,

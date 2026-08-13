@@ -1,7 +1,7 @@
 import { asc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { thematiques } from "@/lib/db/schema";
+import { ressources, thematiques } from "@/lib/db/schema";
 
 export async function getAllThematiques() {
   return db.query.thematiques.findMany({
@@ -23,7 +23,7 @@ export async function getThematiqueBySlug(slug: string) {
     where: eq(thematiques.slug, slug),
     with: {
       cours: true,
-      ressources: true,
+      ressources: { where: eq(ressources.status, "published") },
       hadiths: true,
     },
   });
