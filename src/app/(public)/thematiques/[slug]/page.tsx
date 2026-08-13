@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { BackButton } from "@/components/public/back-button";
-import { HadithCard } from "@/components/public/hadith-card";
-import { RessourceItem } from "@/components/public/ressource-item";
+import { RessourcesHadithsTabs } from "@/components/public/ressources-hadiths-tabs";
 import { getThematiqueBySlug } from "@/lib/db/queries/thematiques";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
 
@@ -51,47 +50,12 @@ export default async function ThematiqueDetailPage({ params }: Props) {
         <p className="mt-2 text-muted-foreground">{t.description}</p>
       )}
 
-      <h2 className="mt-10 font-heading text-xl font-semibold">Ressources</h2>
-      {t.ressources.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Aucune ressource pour cette thématique pour le moment.
-        </p>
-      ) : (
-        <div className="mt-4 grid gap-3">
-          {t.ressources.map((r) => (
-            <RessourceItem
-              key={r.id}
-              id={r.id}
-              title={r.title}
-              type={r.type}
-              url={r.url}
-              content={r.content}
-              description={r.description}
-            />
-          ))}
-        </div>
-      )}
-
-      <h2 className="mt-10 font-heading text-xl font-semibold">Hadiths</h2>
-      {t.hadiths.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Aucun hadith pour cette thématique pour le moment.
-        </p>
-      ) : (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {t.hadiths.map((h) => (
-            <HadithCard
-              key={h.id}
-              slug={h.slug}
-              title={h.title}
-              arabicText={h.arabicText}
-              translationFr={h.translationFr}
-              coursTitle={t.cours.title}
-              thematiqueTitle={t.title}
-            />
-          ))}
-        </div>
-      )}
+      <RessourcesHadithsTabs
+        ressources={t.ressources}
+        hadiths={t.hadiths}
+        coursTitle={t.cours.title}
+        thematiqueTitle={t.title}
+      />
     </div>
   );
 }
