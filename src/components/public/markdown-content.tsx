@@ -62,7 +62,7 @@ export function MarkdownContent({
       lang={lang}
       className={cn(
         "max-w-2xl text-sm leading-relaxed text-foreground",
-        className
+        className,
       )}
     >
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>

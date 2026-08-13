@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { MarkdownContent } from "@/components/public/markdown-content";
 
 const sizeSteps = [
-  "max-w-2xl text-sm leading-relaxed",
-  "max-w-2xl text-base leading-relaxed",
-  "max-w-3xl text-lg leading-loose",
-  "max-w-3xl text-xl leading-loose",
+  "max-w-none text-sm leading-relaxed",
+  "max-w-none text-base leading-relaxed",
+  "max-w-none text-lg leading-loose",
+  "max-w-none text-xl leading-loose",
 ];
 
 export function TextResourceReader({ content }: { content: string }) {
@@ -39,7 +39,7 @@ export function TextResourceReader({ content }: { content: string }) {
           <Plus />
         </Button>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 text-justify">
         <MarkdownContent content={content} className={sizeSteps[step]} />
       </div>
     </div>
