@@ -12,7 +12,7 @@ export function SiteHeader() {
           href="/"
           className="col-start-1 flex items-center gap-2 font-heading text-lg font-semibold tracking-tight"
         >
-          <BookOpen className="size-5" />
+          {/* <BookOpen className="size-5" /> */}
           DeenShare
         </Link>
         <SiteNavLinks className="col-start-2" />

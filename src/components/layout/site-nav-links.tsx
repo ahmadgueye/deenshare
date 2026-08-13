@@ -7,7 +7,7 @@ import { cn, isNavActive } from "@/lib/utils";
 
 const links = [
   { href: "/cours", label: "Cours" },
-  { href: "/seances", label: "Séances" },
+  { href: "/seances", label: "Révisions" },
   { href: "/hadiths", label: "Hadiths" },
   { href: "/recherche", label: "Recherche", title: "Recherche (⌘K)" },
 ];
@@ -19,7 +19,7 @@ export function SiteNavLinks({ className }: { className?: string }) {
     <nav
       className={cn(
         "hidden items-center gap-6 text-sm text-muted-foreground sm:flex",
-        className
+        className,
       )}
     >
       {links.map((link) => (
@@ -29,7 +29,7 @@ export function SiteNavLinks({ className }: { className?: string }) {
           title={link.title}
           className={cn(
             "hover:text-foreground",
-            isNavActive(pathname, link.href) && "font-medium text-foreground"
+            isNavActive(pathname, link.href) && "font-medium text-foreground",
           )}
         >
           {link.label}
