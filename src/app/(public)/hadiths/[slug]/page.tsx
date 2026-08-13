@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Badge } from "@/components/ui/badge";
 import { BackButton } from "@/components/public/back-button";
 import { getHadithBySlug } from "@/lib/db/queries/hadiths";
 import { defaultDescription, siteOpenGraph } from "@/lib/metadata";
@@ -50,6 +51,12 @@ export default async function HadithDetailPage({ params }: Props) {
       <h1 className="mt-4 font-heading text-3xl font-semibold tracking-tight">
         {h.title}
       </h1>
+
+      <Link href={`/thematiques/${h.thematique.slug}`} className="mt-3 inline-block">
+        <Badge variant="outline" className="hover:bg-muted">
+          {h.thematique.cours.title} · {h.thematique.title}
+        </Badge>
+      </Link>
 
       <p
         dir="rtl"

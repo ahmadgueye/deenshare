@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { ressources } from "@/lib/db/schema";
@@ -21,6 +21,15 @@ export async function getRecentRessources(limit: number) {
 export async function getRessourceById(id: string) {
   const result = await db.query.ressources.findFirst({
     where: eq(ressources.id, id),
+  });
+
+  return result ?? null;
+}
+
+export async function getPublishedRessourceById(id: string) {
+  const result = await db.query.ressources.findFirst({
+    where: and(eq(ressources.id, id), eq(ressources.status, "published")),
+    with: { thematique: { with: { cours: true } } },
   });
 
   return result ?? null;

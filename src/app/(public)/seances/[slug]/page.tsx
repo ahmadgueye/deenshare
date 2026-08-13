@@ -87,6 +87,7 @@ export default async function SeanceDetailPage({ params }: Props) {
             {s.seanceRessources.map(({ ressource }) => (
               <RessourceItem
                 key={ressource.id}
+                id={ressource.id}
                 title={ressource.title}
                 type={ressource.type}
                 url={ressource.url}

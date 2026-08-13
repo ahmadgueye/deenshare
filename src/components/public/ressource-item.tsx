@@ -1,15 +1,19 @@
+import Link from "next/link";
+
 import { Badge } from "@/components/ui/badge";
-import { MarkdownContent } from "@/components/public/markdown-content";
 import { ressourceTypeConfig } from "@/lib/ressource-types";
+import { stripMarkdown } from "@/lib/metadata";
 import type { RessourceType } from "@/lib/db/queries/search";
 
 export function RessourceItem({
+  id,
   title,
   type,
   url,
   content,
   description,
 }: {
+  id: string;
   title: string;
   type: RessourceType;
   url: string | null;
@@ -29,14 +33,20 @@ export function RessourceItem({
 
   if (type === "texte") {
     return (
-      <div className="border p-4">
+      <Link
+        href={`/ressources/${id}`}
+        className="block border p-4 transition-colors hover:bg-muted"
+      >
         {header}
         {content && (
-          <div className="mt-2">
-            <MarkdownContent content={content} />
-          </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {stripMarkdown(content, 240)}
+          </p>
         )}
-      </div>
+        <span className="mt-2 inline-block text-sm underline underline-offset-4">
+          Lire la suite
+        </span>
+      </Link>
     );
   }
 

@@ -61,6 +61,7 @@ export default async function ThematiqueDetailPage({ params }: Props) {
           {t.ressources.map((r) => (
             <RessourceItem
               key={r.id}
+              id={r.id}
               title={r.title}
               type={r.type}
               url={r.url}
@@ -85,6 +86,8 @@ export default async function ThematiqueDetailPage({ params }: Props) {
               title={h.title}
               arabicText={h.arabicText}
               translationFr={h.translationFr}
+              coursTitle={t.cours.title}
+              thematiqueTitle={t.title}
             />
           ))}
         </div>
