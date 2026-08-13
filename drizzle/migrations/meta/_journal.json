@@ -71,6 +71,13 @@
       "when": 1786622834709,
       "tag": "0009_milky_lord_hawal",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1786641938363,
+      "tag": "0010_open_ogun",
+      "breakpoints": true
     }
   ]
 }

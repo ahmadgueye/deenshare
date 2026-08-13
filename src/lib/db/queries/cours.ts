@@ -12,6 +12,11 @@ export async function getAllCours() {
 export async function getCoursById(id: string) {
   const result = await db.query.cours.findFirst({
     where: eq(cours.id, id),
+    with: {
+      thematiques: {
+        orderBy: [asc(thematiques.orderIndex), asc(thematiques.title)],
+      },
+    },
   });
 
   return result ?? null;

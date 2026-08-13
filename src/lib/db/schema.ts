@@ -70,6 +70,7 @@ export const ressources = pgTable("ressources", {
   thematiqueId: uuid("thematique_id")
     .notNull()
     .references(() => thematiques.id, { onDelete: "cascade" }),
+  orderIndex: integer("order_index").notNull().default(0),
   title: text("title").notNull(),
   type: ressourceTypeEnum("type").notNull(),
   url: text("url"),

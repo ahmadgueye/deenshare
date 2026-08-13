@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -89,4 +89,24 @@ export async function deleteThematique(id: string) {
   await db.delete(thematiques).where(eq(thematiques.id, id));
   revalidatePath("/dashboard/thematiques");
   revalidatePath("/cours");
+}
+
+export async function reorderThematiques(
+  coursId: string,
+  orderedIds: string[]
+): Promise<{ error?: string } | undefined> {
+  await requireContributor();
+
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      db
+        .update(thematiques)
+        .set({ orderIndex: index, updatedAt: new Date() })
+        .where(and(eq(thematiques.id, id), eq(thematiques.coursId, coursId)))
+    )
+  );
+
+  revalidatePath("/dashboard/cours");
+  revalidatePath("/cours");
+  return undefined;
 }

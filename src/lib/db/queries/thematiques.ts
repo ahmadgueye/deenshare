@@ -13,6 +13,11 @@ export async function getAllThematiques() {
 export async function getThematiqueById(id: string) {
   const result = await db.query.thematiques.findFirst({
     where: eq(thematiques.id, id),
+    with: {
+      ressources: {
+        orderBy: [asc(ressources.orderIndex), asc(ressources.title)],
+      },
+    },
   });
 
   return result ?? null;
@@ -23,7 +28,10 @@ export async function getThematiqueBySlug(slug: string) {
     where: eq(thematiques.slug, slug),
     with: {
       cours: true,
-      ressources: { where: eq(ressources.status, "published") },
+      ressources: {
+        where: eq(ressources.status, "published"),
+        orderBy: [asc(ressources.orderIndex)],
+      },
       hadiths: true,
     },
   });
