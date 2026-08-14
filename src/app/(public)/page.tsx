@@ -47,7 +47,7 @@ export default async function Home() {
                 href={`/seances/${s.slug}`}
                 title={s.title}
                 description={formatSeanceDate(s.sessionDate)}
-                accent
+                // accent
               />
             ))}
           </div>
