@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { EntityCard } from "@/components/public/entity-card";
+import { coursStatusConfig } from "@/lib/cours-status";
 import { getAllCours } from "@/lib/db/queries/cours";
 
 export const metadata: Metadata = {
@@ -31,6 +32,11 @@ export default async function CoursListPage() {
               href={`/cours/${c.slug}`}
               title={c.title}
               description={c.description}
+              badge={
+                c.status === "coming_soon"
+                  ? coursStatusConfig.coming_soon
+                  : undefined
+              }
             />
           ))}
         </div>

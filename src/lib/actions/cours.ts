@@ -15,6 +15,7 @@ export type ActionState = { error?: string } | undefined;
 const coursSchema = z.object({
   title: z.string().trim().min(1, "Le titre est requis."),
   description: z.string().trim().optional(),
+  status: z.enum(["published", "coming_soon"]),
 });
 
 export async function createCours(
@@ -25,6 +26,7 @@ export async function createCours(
   const parsed = coursSchema.safeParse({
     title: formData.get("title"),
     description: formData.get("description"),
+    status: formData.get("status"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
@@ -34,6 +36,7 @@ export async function createCours(
     await db.insert(cours).values({
       title: parsed.data.title,
       description: parsed.data.description || null,
+      status: parsed.data.status,
       slug: slugify(parsed.data.title),
       createdBy: profile.id,
     });
@@ -56,6 +59,7 @@ export async function updateCours(
   const parsed = coursSchema.safeParse({
     title: formData.get("title"),
     description: formData.get("description"),
+    status: formData.get("status"),
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
@@ -67,6 +71,7 @@ export async function updateCours(
       .set({
         title: parsed.data.title,
         description: parsed.data.description || null,
+        status: parsed.data.status,
         slug: slugify(parsed.data.title),
         updatedAt: new Date(),
       })

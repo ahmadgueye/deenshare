@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { EntityCard } from "@/components/public/entity-card";
+import { coursStatusConfig } from "@/lib/cours-status";
 import { getAllCours } from "@/lib/db/queries/cours";
 
 export default async function Home() {
@@ -40,6 +41,11 @@ export default async function Home() {
                 href={`/cours/${c.slug}`}
                 title={c.title}
                 description={c.description}
+                badge={
+                  c.status === "coming_soon"
+                    ? coursStatusConfig.coming_soon
+                    : undefined
+                }
               />
             ))}
           </div>

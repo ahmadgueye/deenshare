@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DeleteButton } from "@/components/dashboard/delete-button";
 import { Input } from "@/components/ui/input";
@@ -17,11 +18,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteCours } from "@/lib/actions/cours";
+import { coursStatusConfig, type CoursStatus } from "@/lib/cours-status";
 
 type CoursRow = {
   id: string;
   title: string;
   description: string | null;
+  status: CoursStatus;
   createdAt: Date;
 };
 
@@ -87,6 +90,7 @@ export function CoursTable({ data }: { data: CoursRow[] }) {
                 onSort={handleSort}
               />
               <TableHead>Description</TableHead>
+              <TableHead>Statut</TableHead>
               <SortableTableHead
                 label="Créé le"
                 sortKey="createdAt"
@@ -111,6 +115,11 @@ export function CoursTable({ data }: { data: CoursRow[] }) {
                   title={c.description ?? undefined}
                 >
                   {c.description}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={coursStatusConfig[c.status].badgeVariant}>
+                    {coursStatusConfig[c.status].label}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {new Date(c.createdAt).toLocaleDateString("fr-FR")}

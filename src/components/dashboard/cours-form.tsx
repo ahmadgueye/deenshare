@@ -11,6 +11,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createCours,
@@ -18,10 +25,20 @@ import {
   type ActionState,
 } from "@/lib/actions/cours";
 
+const statusOptions = [
+  { value: "published", label: "Publié" },
+  { value: "coming_soon", label: "Bientôt disponible" },
+];
+
 export function CoursForm({
   cours,
 }: {
-  cours?: { id: string; title: string; description: string | null };
+  cours?: {
+    id: string;
+    title: string;
+    description: string | null;
+    status: "published" | "coming_soon";
+  };
 }) {
   const action = cours ? updateCours.bind(null, cours.id) : createCours;
   const [state, formAction] = useActionState<ActionState, FormData>(
@@ -40,6 +57,26 @@ export function CoursForm({
             defaultValue={cours?.title}
             required
           />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="status">Statut</FieldLabel>
+          <Select
+            name="status"
+            defaultValue={cours?.status ?? "published"}
+            items={statusOptions}
+            required
+          >
+            <SelectTrigger id="status" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field>
           <FieldLabel htmlFor="description">Description</FieldLabel>

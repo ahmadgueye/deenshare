@@ -48,24 +48,38 @@ export default async function CoursDetailPage({ params }: Props) {
         <p className="mt-2 text-muted-foreground">{c.description}</p>
       )}
 
-      <h2 className="mt-10 font-heading text-xl font-semibold">
-        Thématiques
-      </h2>
-      {c.thematiques.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Aucune thématique pour ce cours pour le moment.
-        </p>
-      ) : (
-        <div className="mt-4 grid gap-3">
-          {c.thematiques.map((t) => (
-            <EntityCard
-              key={t.id}
-              href={`/thematiques/${t.slug}`}
-              title={t.title}
-              description={t.description}
-            />
-          ))}
+      {c.status === "coming_soon" ? (
+        <div className="mt-10 rounded-lg border border-dashed p-6 text-center">
+          <h2 className="font-heading text-xl font-semibold">
+            Bientôt disponible
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Ce cours arrive bientôt ! Revenez prochainement pour découvrir
+            son contenu.
+          </p>
         </div>
+      ) : (
+        <>
+          <h2 className="mt-10 font-heading text-xl font-semibold">
+            Thématiques
+          </h2>
+          {c.thematiques.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Aucune thématique pour ce cours pour le moment.
+            </p>
+          ) : (
+            <div className="mt-4 grid gap-3">
+              {c.thematiques.map((t) => (
+                <EntityCard
+                  key={t.id}
+                  href={`/thematiques/${t.slug}`}
+                  title={t.title}
+                  description={t.description}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
