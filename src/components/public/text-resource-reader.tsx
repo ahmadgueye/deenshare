@@ -11,6 +11,8 @@ const sizeSteps = [
   "max-w-none text-base leading-relaxed",
   "max-w-none text-lg leading-loose",
   "max-w-none text-xl leading-loose",
+  "max-w-none text-2xl leading-loose",
+  "max-w-none text-3xl leading-loose",
 ];
 
 export function TextResourceReader({ content }: { content: string }) {
