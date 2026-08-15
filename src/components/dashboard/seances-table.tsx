@@ -106,7 +106,12 @@ export function SeancesTable({ data }: { data: SeanceRow[] }) {
           <TableBody>
             {sorted.map((s) => (
               <TableRow key={s.id}>
-                <TableCell className="font-medium">{s.title}</TableCell>
+                <TableCell
+                  className="max-w-xs truncate font-medium"
+                  title={s.title}
+                >
+                  {s.title}
+                </TableCell>
                 <TableCell className="text-muted-foreground">
                   {s.sessionDate
                     ? new Date(s.sessionDate).toLocaleDateString("fr-FR")

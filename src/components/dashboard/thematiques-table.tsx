@@ -151,8 +151,16 @@ export function ThematiquesTable({ data }: { data: ThematiqueRow[] }) {
           <TableBody>
             {sorted.map((t) => (
               <TableRow key={t.id}>
-                <TableCell className="font-medium">{t.title}</TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell
+                  className="max-w-xs truncate font-medium"
+                  title={t.title}
+                >
+                  {t.title}
+                </TableCell>
+                <TableCell
+                  className="max-w-xs truncate text-muted-foreground"
+                  title={t.cours.title}
+                >
                   {t.cours.title}
                 </TableCell>
                 <TableCell className="text-muted-foreground">

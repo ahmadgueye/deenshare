@@ -100,8 +100,16 @@ export function CoursTable({ data }: { data: CoursRow[] }) {
           <TableBody>
             {sorted.map((c) => (
               <TableRow key={c.id}>
-                <TableCell className="font-medium">{c.title}</TableCell>
-                <TableCell className="max-w-md truncate text-muted-foreground">
+                <TableCell
+                  className="max-w-xs truncate font-medium"
+                  title={c.title}
+                >
+                  {c.title}
+                </TableCell>
+                <TableCell
+                  className="max-w-md truncate text-muted-foreground"
+                  title={c.description ?? undefined}
+                >
                   {c.description}
                 </TableCell>
                 <TableCell className="text-muted-foreground">

@@ -29,13 +29,14 @@ export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-56 shrink-0 flex-col justify-between border-r p-4">
+    <aside className="sticky top-0 flex h-screen w-56 shrink-0 flex-col justify-between overflow-y-auto border-r p-4">
       <div>
         <Link
           href="/"
-          className="mb-8 block font-heading text-lg font-semibold tracking-tight"
+          lang="ar"
+          className="mb-8 block text-left font-logo-arabic text-2xl font-bold tracking-tight"
         >
-          DeenShare
+          طالب
         </Link>
         <nav className="flex flex-col gap-1 text-sm">
           {navItems.map(({ href, label, icon: Icon }) => (

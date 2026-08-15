@@ -171,9 +171,9 @@ export default async function DashboardHomePage() {
                 <Link
                   key={r.id}
                   href={`/thematiques/${r.thematique.slug}`}
-                  className="flex items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
+                  className="flex min-w-0 items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
                 >
-                  <span className="truncate">{r.title}</span>
+                  <span className="min-w-0 flex-1 truncate">{r.title}</span>
                   <Badge variant="secondary" className="shrink-0">
                     {typeLabels[r.type]}
                   </Badge>
@@ -196,9 +196,9 @@ export default async function DashboardHomePage() {
                 <Link
                   key={s.id}
                   href={`/seances/${s.slug}`}
-                  className="flex items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
+                  className="flex min-w-0 items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
                 >
-                  <span className="truncate">{s.title}</span>
+                  <span className="min-w-0 flex-1 truncate">{s.title}</span>
                   {s.sessionDate && (
                     <span className="shrink-0 text-muted-foreground">
                       {new Date(s.sessionDate).toLocaleDateString("fr-FR")}
@@ -225,9 +225,9 @@ export default async function DashboardHomePage() {
               <Link
                 key={h.id}
                 href={`/hadiths/${h.slug}`}
-                className="flex items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
+                className="flex min-w-0 items-center justify-between gap-2 border p-3 text-sm transition-colors hover:bg-muted"
               >
-                <span className="truncate">{h.title}</span>
+                <span className="min-w-0 flex-1 truncate">{h.title}</span>
                 <span className="shrink-0 truncate text-muted-foreground">
                   {h.narrator}
                 </span>

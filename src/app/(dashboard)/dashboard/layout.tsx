@@ -37,9 +37,9 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex flex-1">
+    <div className="flex min-w-0 flex-1">
       <DashboardSidebar isAdmin={profile.role === "admin"} />
-      <main className="flex-1 px-8 py-8">{children}</main>
+      <main className="min-w-0 flex-1 px-8 py-8">{children}</main>
     </div>
   );
 }

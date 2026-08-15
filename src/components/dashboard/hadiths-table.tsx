@@ -166,11 +166,22 @@ export function HadithsTable({ data }: { data: HadithRow[] }) {
           <TableBody>
             {sorted.map((h) => (
               <TableRow key={h.id}>
-                <TableCell className="font-medium">{h.title}</TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell
+                  className="max-w-xs truncate font-medium"
+                  title={h.title}
+                >
+                  {h.title}
+                </TableCell>
+                <TableCell
+                  className="max-w-xs truncate text-muted-foreground"
+                  title={h.narrator}
+                >
                   {h.narrator}
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell
+                  className="max-w-xs truncate text-muted-foreground"
+                  title={`${h.thematique.cours.title} · ${h.thematique.title}`}
+                >
                   {h.thematique.cours.title} · {h.thematique.title}
                 </TableCell>
                 <TableCell className="text-muted-foreground">

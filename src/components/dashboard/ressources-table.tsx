@@ -220,7 +220,12 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
           <TableBody>
             {sorted.map((r) => (
               <TableRow key={r.id}>
-                <TableCell className="font-medium">{r.title}</TableCell>
+                <TableCell
+                  className="max-w-xs truncate font-medium"
+                  title={r.title}
+                >
+                  {r.title}
+                </TableCell>
                 <TableCell>
                   <Badge variant="secondary">{typeLabels[r.type]}</Badge>
                 </TableCell>
@@ -229,7 +234,10 @@ export function RessourcesTable({ data }: { data: RessourceRow[] }) {
                     {ressourceStatusConfig[r.status].label}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell
+                  className="max-w-xs truncate text-muted-foreground"
+                  title={`${r.thematique.cours.title} · ${r.thematique.title}`}
+                >
                   {r.thematique.cours.title} · {r.thematique.title}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
