@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 
+import { DonateDialog } from "@/components/layout/donate-dialog";
 import { SiteNavLinks } from "@/components/layout/site-nav-links";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
@@ -21,6 +22,7 @@ export function SiteHeader() {
           <SiteNavLinks />
         </div>
         <div className="flex items-center justify-end gap-2">
+          <DonateDialog />
           <ThemeToggle />
         </div>
       </div>
