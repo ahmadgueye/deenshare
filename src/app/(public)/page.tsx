@@ -10,11 +10,10 @@ export default async function Home() {
     <div className="flex flex-col gap-16 animate-in fade-in duration-300">
       <section className="max-w-2xl">
         <h1 className="font-heading text-3xl font-semibold leading-tight tracking-tight text-balance sm:text-4xl">
-          Les ressources de nos cours, toujours à leur place.
+          Des ressources pour apprendre l'Islam, toujours à leur place.
         </h1>
         <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-          Vidéos, PDF, liens et séances de révision de vos cours — accessible à
-          tous, sans compte.
+          Accessible à tous, à votre guise.
         </p>
       </section>
 
