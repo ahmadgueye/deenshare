@@ -21,7 +21,7 @@ export async function generateMetadata({
   const title = s?.title ?? "Séance";
   const description = s?.summary ? stripMarkdown(s.summary) : defaultDescription;
   return {
-    title: `${title} — DeenShare`,
+    title: `${title} — Taalib`,
     description,
     openGraph: { ...siteOpenGraph, title, description },
   };

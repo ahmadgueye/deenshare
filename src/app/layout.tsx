@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Newsreader, Geist_Mono, Noto_Naskh_Arabic } from "next/font/google";
+import {
+  Inter,
+  Newsreader,
+  Geist_Mono,
+  Noto_Naskh_Arabic,
+  Scheherazade_New,
+} from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -26,22 +32,28 @@ const notoNaskhArabic = Noto_Naskh_Arabic({
   subsets: ["arabic"],
 });
 
+const scheherazadeNew = Scheherazade_New({
+  variable: "--font-logo-arabic",
+  subsets: ["arabic"],
+  weight: ["700"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
   ),
-  title: "DeenShare",
+  title: "Taalib",
   description: defaultDescription,
   openGraph: {
     ...siteOpenGraph,
-    title: "DeenShare",
+    title: "Taalib",
     description: defaultDescription,
   },
   twitter: {
     card: "summary_large_image",
   },
   appleWebApp: {
-    title: "DeenShare",
+    title: "Taalib",
   },
 };
 
@@ -57,7 +69,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`${inter.variable} ${newsreader.variable} ${geistMono.variable} ${notoNaskhArabic.variable} h-full antialiased`}
+      className={`${inter.variable} ${newsreader.variable} ${geistMono.variable} ${notoNaskhArabic.variable} ${scheherazadeNew.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider>

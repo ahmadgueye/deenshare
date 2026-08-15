@@ -11,7 +11,7 @@ import {
 import { GoogleLoginButton } from "@/components/public/google-login-button";
 
 export const metadata: Metadata = {
-  title: "Connexion — DeenShare",
+  title: "Connexion — Taalib",
   robots: { index: false, follow: false },
 };
 
@@ -22,7 +22,7 @@ export default function LoginPage() {
         href="/"
         className="mb-8 font-heading text-lg font-semibold tracking-tight"
       >
-        DeenShare
+        Taalib
       </Link>
       <Card className="w-full max-w-sm">
         <CardHeader>

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = t?.title ?? "Thématique";
   const description = t?.description ?? defaultDescription;
   return {
-    title: `${title} — DeenShare`,
+    title: `${title} — Taalib`,
     description,
     openGraph: { ...siteOpenGraph, title, description },
   };

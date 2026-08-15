@@ -35,7 +35,7 @@ export default async function Image({
         }}
       >
         <div style={{ display: "flex", fontSize: 28, color: "#737373" }}>
-          DeenShare · Séance de révision
+          Taalib · Séance de révision
         </div>
         <div
           style={{

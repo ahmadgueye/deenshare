@@ -15,7 +15,7 @@ import {
 import { ressourceTypeConfig } from "@/lib/ressource-types";
 
 export const metadata: Metadata = {
-  title: "Recherche — DeenShare",
+  title: "Recherche — Taalib",
 };
 
 const typeLabels: Record<SearchResult["type"], string> = {

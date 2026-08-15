@@ -4,8 +4,8 @@ import { defaultDescription } from "@/lib/metadata";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "DeenShare",
-    short_name: "DeenShare",
+    name: "Taalib",
+    short_name: "Taalib",
     description: defaultDescription,
     start_url: "/",
     display: "standalone",

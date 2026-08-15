@@ -2,7 +2,7 @@
 // metadata — a page that sets its own `openGraph` loses siteName/locale/type
 // unless it spreads this in too.
 export const siteOpenGraph = {
-  siteName: "DeenShare",
+  siteName: "Taalib",
   locale: "fr_FR",
   type: "website" as const,
 };

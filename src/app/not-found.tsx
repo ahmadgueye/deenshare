@@ -9,7 +9,7 @@ export default function NotFound() {
         href="/"
         className="font-heading text-lg font-semibold tracking-tight"
       >
-        DeenShare
+        Taalib
       </Link>
       <h1 className="font-heading text-2xl font-semibold">Page introuvable</h1>
       <p className="max-w-sm text-muted-foreground">

@@ -19,7 +19,7 @@ export default function Image() {
         }}
       >
         <div style={{ display: "flex", fontSize: 56, fontWeight: 700 }}>
-          DeenShare
+          Taalib
         </div>
         <div
           style={{

@@ -4,7 +4,7 @@ import { HadithCard } from "@/components/public/hadith-card";
 import { getAllHadiths } from "@/lib/db/queries/hadiths";
 
 export const metadata: Metadata = {
-  title: "Hadiths — DeenShare",
+  title: "Hadiths — Taalib",
 };
 
 export default async function HadithsListPage() {

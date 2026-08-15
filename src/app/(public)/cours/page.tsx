@@ -4,7 +4,7 @@ import { EntityCard } from "@/components/public/entity-card";
 import { getAllCours } from "@/lib/db/queries/cours";
 
 export const metadata: Metadata = {
-  title: "Cours — DeenShare",
+  title: "Cours — Taalib",
 };
 
 export default async function CoursListPage() {

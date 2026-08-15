@@ -19,7 +19,7 @@ export async function generateMetadata({
   const title = c?.title ?? "Cours";
   const description = c?.description ?? defaultDescription;
   return {
-    title: `${title} — DeenShare`,
+    title: `${title} — Taalib`,
     description,
     openGraph: { ...siteOpenGraph, title, description },
   };

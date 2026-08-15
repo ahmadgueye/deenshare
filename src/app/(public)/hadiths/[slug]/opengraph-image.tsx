@@ -28,7 +28,7 @@ export default async function Image({
         }}
       >
         <div style={{ display: "flex", fontSize: 28, color: "#737373" }}>
-          DeenShare{h ? ` · ${h.thematique.title}` : " · Hadith"}
+          Taalib{h ? ` · ${h.thematique.title}` : " · Hadith"}
         </div>
         <div
           style={{

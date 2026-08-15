@@ -4,7 +4,7 @@ import { SeancesTabs } from "@/components/public/seances-tabs";
 import { getPastSeances, getUpcomingSeances } from "@/lib/db/queries/seances";
 
 export const metadata: Metadata = {
-  title: "Séances de révision — DeenShare",
+  title: "Séances de révision — Taalib",
 };
 
 export default async function SeancesListPage() {

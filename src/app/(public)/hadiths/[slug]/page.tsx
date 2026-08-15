@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = h?.title ?? "Hadith";
   const description = h?.translationFr ?? defaultDescription;
   return {
-    title: `${title} — DeenShare`,
+    title: `${title} — Taalib`,
     description,
     openGraph: { ...siteOpenGraph, title, description },
   };
