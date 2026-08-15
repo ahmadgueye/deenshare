@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Calendar, Home, Search } from "lucide-react";
+import { BookOpen, Home, ScrollText, Search } from "lucide-react";
 
 import { cn, isNavActive } from "@/lib/utils";
 
 const tabs = [
   { href: "/", label: "Accueil", icon: Home, exact: true },
   { href: "/cours", label: "Cours", icon: BookOpen },
-  { href: "/seances", label: "Séances", icon: Calendar },
+  { href: "/hadiths", label: "Ahadith", icon: ScrollText },
   { href: "/recherche", label: "Recherche", icon: Search },
 ];
 
@@ -26,7 +26,7 @@ export function MobileTabBar() {
             href={href}
             className={cn(
               "flex flex-1 flex-col items-center gap-1 py-2 text-xs text-muted-foreground",
-              active && "text-foreground"
+              active && "text-foreground",
             )}
           >
             <Icon className="size-5" />
