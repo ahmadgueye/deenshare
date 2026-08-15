@@ -11,7 +11,7 @@ export default function PublicLayout({
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12 pb-24 sm:pb-12">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12 pb-28 sm:pb-12">
         {children}
       </main>
       <SiteFooter />
